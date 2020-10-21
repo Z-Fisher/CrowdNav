@@ -1,0 +1,30 @@
+<launch>
+
+  <arg name="robot_init_y" default="0.5"/>
+  <arg name="rviz" default="false"/>
+  
+  
+
+  <!-- params -->
+  <param name="/pedsim/scene_file" value="$(find pedsim_simulator)scenarios/alpha_scenario.xml" type="string"/>
+  <param name="/use_sim_time" value="false"/>
+
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find pedsim_simulator)/rviz/social_contexts_activities.rviz" if="$(arg rviz)"/>
+
+
+  <!-- pedestrian dynamics simulator. Note that this node could simulate robots but here it doesn't as specified by the *.xml file  -->
+  <node name="pedsim_simulator" pkg="pedsim_simulator" type="pedsim_simulator" output="screen">
+      <!-- 0 - headless, 1 - minimal, 2 - full -->
+      <param name="visual_mode" value="1" type="int"/>
+      <param name="scene_file" value="$(find pedsim_simulator)scenarios/alpha_scenario.xml" type="string"/>
+      <param name="default_queue_size" value="10"/>
+      <!-- param name="max_robot_speed" value="1.5" type="double"/-->
+      <param name="robot_mode" value="1" type="int"/>
+      <param name="enable_groups" value="false" type="bool"/>
+  </node>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find pedsim_simulator)/worlds/alpha_world.world"/>
+  </include>
+</launch>
