@@ -1,10 +1,24 @@
 #include "ros/ros.h"
 #include "gazebo_msgs/ModelStates.h"
+#include "geometry_msgs/Pose.h"
+#include "geometry_msgs/Twist.h"
 #include <iostream>
+#include <string> 
 
 
-void agent_callback(const gazebo_msgs::ModelStates::ConstPtr& msg) {
-    ROS_INFO("I heard something");
+void agent_callback(const gazebo_msgs::ModelStates& msg) {
+    for (int i = 0; i < msg.name.size(); i++) {
+        std::string agent_name = msg.name[i];
+        geometry_msgs::Twist agent_twist = msg.twist[i];
+        geometry_msgs::Pose agent_pose = msg.pose[i];
+        try {
+            int agent_num = std::stoi(agent_name);
+            // do some other stuff here
+        } catch (const std::invalid_argument& ia) {
+            continue;
+        }
+        ROS_INFO("Agent name: %s", agent_name.c_str());
+    }
 }
 
 int main(int argc, char **argv) {
