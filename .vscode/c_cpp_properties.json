@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/zf/Documents/700/catkin_ws/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/pedsim_ros/3rdparty/libpedsim/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/pedsim_ros/pedsim_sensors/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/pedsim_ros/pedsim_simulator/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/pedsim_ros/pedsim_utils/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/pedsim_ros/pedsim_visualizer/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/turtlebot3_simulations/turtlebot3_fake/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/turtlebot3_simulations/turtlebot3_gazebo/include/**",
+                "/home/zf/Documents/700/catkin_ws/src/CrowdNav/turtlebot3/turtlebot3_slam/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14"
+        }
+    ],
+    "version": 4
+}

@@ -34,7 +34,7 @@ namespace gazebo
             rosSub = rosNode->subscribe(so);
             rosQueueThread =std::thread(std::bind(&ActorPosesPlugin::QueueThread, this));
             // in case you need to change/modify model on update
-            // this->updateConnection_ = event::Events::ConnectWorldUpdateBegin(std::bind(&ActorPosesPlugin::OnUpdate, this));
+            //this->updateConnection_ = event::Events::ConnectWorldUpdateBegin(std::bind(&ActorPosesPlugin::OnUpdate, this));
         }
 
 
@@ -79,6 +79,8 @@ namespace gazebo
                         }
                     }
                }
+
+               
 
           }
 

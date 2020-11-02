@@ -9,18 +9,35 @@ import rospy
 from gazebo_msgs.srv import SpawnModel
 from geometry_msgs.msg import *
 from rospkg import RosPack
-from pedsim_msgs.msg  import AgentStates
+from pedsim_msgs.msg import AgentStates
+from gazebo_msgs.srv import DeleteModel
 
 # xml file containing a gazebo model to represent agent, currently is represented by a cubic but can be changed
 global xml_file
 
 def actor_poses_callback(actors):
+
+    # delete actors
+    if len(existing_actors) > 8:
+        delete_model_prox(existing_actors[1]) 
+        removed_actors.append(existing_actors[1])
+        existing_actors.pop(1)
+
+
     for actor in actors.agent_states:
         actor_id = str( actor.id )
-        actor_pose = actor.pose
-        rospy.loginfo("Spawning model: actor_id = %s", actor_id)
 
-        model_pose = Pose(Point(x= actor_pose.position.x,
+
+        # only spawn models that haven't already been created         
+        if actor_id in existing_actors:
+            pass
+        elif actor_id in removed_actors:
+            pass
+        else:
+            actor_pose = actor.pose
+            rospy.loginfo("Spawning model: actor_id = %s", actor_id)
+
+            model_pose = Pose(Point(x= actor_pose.position.x,
                                y= actor_pose.position.y,
                                z= actor_pose.position.z),
                          Quaternion(actor_pose.orientation.x,
@@ -28,13 +45,18 @@ def actor_poses_callback(actors):
                                     actor_pose.orientation.z,
                                     actor_pose.orientation.w) )
 
-        spawn_model(actor_id, xml_string, "", model_pose, "world")
-    rospy.signal_shutdown("all agents have been spawned !")
-
+            spawn_model(actor_id, xml_string, "", model_pose, "world")
+            existing_actors.append(actor_id)
+    
+    #rospy.signal_shutdown("all agents have been spawned !")
 
 
 
 if __name__ == '__main__':
+
+    existing_actors = []
+    removed_actors = []
+    delete_model_prox = rospy.ServiceProxy('gazebo/delete_model', DeleteModel)
 
     rospy.init_node("spawn_pedsim_agents")
 

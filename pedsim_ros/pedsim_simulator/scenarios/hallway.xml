@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This scenario file was created by SGDiCoP on 2014-04-16T15:14:48-->
+<scenario>
+    <!--Obstacles-->
+  <obstacle x1="-0.5" y1="-0.5" x2="29.5" y2="-0.5"/>
+  <obstacle x1="-0.5" y1="-0.5" x2="-0.5" y2="14.5"/>
+  <obstacle x1="-0.5" y1="14.5" x2="29.5" y2="14.5"/>
+  	<obstacle x1="29.5" y1="-0.5" x2="29.5" y2="14.5"/>
+
+  <!--Waypoints (incl. WaitingQueues)-->
+  <waypoint id="bookshop_entry" x="25" y="5" r="5"/>
+  <waypoint id="bookshop_exit" x="25" y="25" r="5"/>
+
+  <waypoint id="coffee_entry" x="5" y="25" r="5"/>
+  <waypoint id="coffee_exit" x="5" y="5" r="5"/>
+
+  <waypoint id="robot_goal" x="22" y="27" r="2"/>
+  <waypoint id="robot_start" x="4" y="4" r="2"/>
+
+  <queue id="info_desk" x="20" y="15" direction="0"/>
+
+
+    <!--Agents-->
+    <agent x="17" y="11" n="1" dx="0" dy="0" type="2">
+    </agent>
+    <!--AgentClusters-->
+    <agent x="2" y="5" n="1" dx="0" dy="0" type="3">
+    </agent>
+
+    <agent x="7" y="5" n="1" dx="0" dy="0" type="3">
+    </agent>
+
+    <agent x="12" y="5" n="1" dx="0" dy="0" type="3">
+    </agent>
+
+    <agent x="17" y="5" n="1" dx="0" dy="0" type="3">
+    </agent>
+</scenario>

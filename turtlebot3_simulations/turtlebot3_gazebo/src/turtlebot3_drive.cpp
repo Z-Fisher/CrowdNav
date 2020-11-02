@@ -43,8 +43,8 @@ bool Turtlebot3Drive::init()
 
   // initialize variables
   escape_range_       = 30.0 * DEG2RAD;
-  check_forward_dist_ = 0.7;
-  check_side_dist_    = 0.6;
+  check_forward_dist_ = 1.5; //0.7
+  check_side_dist_    = 1.2; //0.6
 
   tb3_pose_ = 0.0;
   prev_tb3_pose_ = 0.0;

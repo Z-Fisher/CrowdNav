@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+  <!--Obstacles-->
+  <obstacle x1="-0.5" y1="-0.5" x2="29.5" y2="-0.5"/>
+  <obstacle x1="-0.5" y1="-0.5" x2="-0.5" y2="10.5"/>
+  <obstacle x1="-0.5" y1="10.5" x2="29.5" y2="10.5"/>
+  <obstacle x1="29.5" y1="-0.5" x2="29.5" y2="10.5"/>
+
+  <!-- Kill Zone -->
+  <waypoint id="ped_kill" x="27" y="5" r="2" b="2"/>
+
+  <!--AgentClusters-->
+  <!-- x,y: spawn position
+         n: number of pedestrians
+     dx,dy: 
+      type: 0-1 regular people / 2 robot / 3 elderly -->
+     
+  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+    <addwaypoint id="ped_kill"/>
+  </source>
+
+  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+    <addwaypoint id="ped_kill"/>
+  </source>
+
+</scenario>

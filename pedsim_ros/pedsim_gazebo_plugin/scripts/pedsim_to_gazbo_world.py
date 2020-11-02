@@ -93,10 +93,10 @@ def parseXML(xmlfile):
     
 def generate_gzb_world( pedsim_file_name ): 
     rospack1 = RosPack()
-    pkg_path = rospack1.get_path('pedsim_simulator')
+    pkg_path = '../../pedsim_simulator' #rospack1.get_path('pedsim_simulator')
     xml_scenario =  pkg_path + "/scenarios/" + pedsim_file_name #bo_airport.xml"
     rospack2 = RosPack()
-    pkg_path = rospack2.get_path('pedsim_gazebo_plugin')
+    pkg_path = '..' #rospack2.get_path('pedsim_gazebo_plugin')
     gazebo_world =  pkg_path + "/worlds/" + pedsim_file_name.split('.')[0] + ".world" #bo_airport.xml"
     global gzb_world    
     with open(gazebo_world, 'w') as gzb_world:
@@ -135,7 +135,7 @@ def generate_gzb_world( pedsim_file_name ):
       
 def generate_launch_file( pedsim_file_name ): 
     rospack2 = RosPack()
-    pkg_path = rospack2.get_path('pedsim_gazebo_plugin')
+    pkg_path = '..' #rospack2.get_path('pedsim_gazebo_plugin')
     launch_file =  pkg_path + "/launch/" + pedsim_file_name.split('.')[0] + ".launch" #bo_airport.xml"
     with open(launch_file, 'w') as launch:
         print >> launch, '''<launch>
