@@ -316,12 +316,35 @@ class StateMachine {
   }
 
   void UpdatePedsGt(const gazebo_msgs::ModelStates& msg) {
+
+    // TODO: move this so it isn't repeated
+    // find index of robot's name 
+    std::string model_name = "turtlebot3_waffle_pi";
+    int robot_idx;
+    for (int i = 0; i < (int)msg.name.size(); ++i) {
+        if (msg.name[i] == model_name) {
+          robot_idx = i;
+        }
+    }
+
+    // gather robot pose
+    geometry_msgs::Twist robot_twist = msg.twist[robot_idx];
+    geometry_msgs::Pose robot_pose = msg.pose[robot_idx];
+    (void)robot_twist;
+    (void)robot_pose;
+
+    // update robot state. was exploring mimicking the odom and laser update method but commented everything out. 
+    //state_estimator_->UpdateRobot(robot_pose, robot_twist);
+    
+
+    // print all gazebo model names that are numbers (pedestrians only)
     for (size_t i = 0; i < msg.name.size(); i++) {
       std::string agent_name = msg.name[i];
       geometry_msgs::Twist agent_twist = msg.twist[i];
       geometry_msgs::Pose agent_pose = msg.pose[i];
       (void)agent_pose;
       (void)agent_twist;
+      
       try {
         int agent_num = std::stoi(agent_name);
         (void)agent_num;
@@ -329,8 +352,10 @@ class StateMachine {
       } catch (const std::invalid_argument& ia) {
         continue;
       }
+
       ROS_INFO("Agent name: %s", agent_name.c_str());
     }
+    
   }
 
   util::Twist ExecuteController() {

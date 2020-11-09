@@ -47,6 +47,11 @@ class StateEstimator {
 
   virtual void UpdateLastCommand(const util::Twist& cmd) = 0;
 
+  /*
+  virtual void UpdateRobot(const util::Pose& pose,
+                           const util::Twist& twist) = 0;
+  */
+
   virtual util::Pose GetEstimatedPose() const = 0;
 
   virtual util::Twist GetEstimatedVelocity() const = 0;
