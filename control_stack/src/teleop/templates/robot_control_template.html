@@ -1,0 +1,236 @@
+<html>
+  <head><title>{{ robot_name }} Control Page</title></head>
+  <body>
+    <h1>{{ robot_name }} Control Page</h1>
+
+    <p>
+    <h2 style="margin-bottom: 5px;">Video:</h2>
+    <div>Before driving the robot, make certain that you have an active video conference session with the robot and can see through its camera.  Do not operate the robot if you cannot see where it is driving.</div>
+    </p>
+
+    <p>
+    <h2 style="margin-bottom: 5px;">Controls:</h2>
+    <div>Use W,A,S,D keys or Arrow keys to move. W/S or ↑/↓ moves forwards or backwards; A/D or ←/→ rotates left or right. This window must have focus to capture key presses.</div>
+    </p>
+
+
+    <h2 style="margin-bottom: 5px;">Configuration:</h2>
+    <p>
+      <div>
+        <input type="checkbox" id="scales" name="scales" onclick='safety_system_click(this);' checked>
+        <label for="scales">Use Navigation Safety System</label>
+      </div>
+      <div style="color:gray;">
+      Prevents driving into obstacles the robot detects near its base; may cause jittering/jerking/difficulty navigating in tight spaces. We recommend keeping the safety system enabled as much as possible and only disabling it when needed.
+      </div>
+    </p>
+
+    <p>
+      <div>Movement Speed (<span id="speed">1.0</span>x)</div>
+      <div>
+        <input type="range" min="0.5" max="1.5" value="1" step="0.1" class="slider" onchange="speed_change(this.value)">
+      </div>
+      <div style="color:gray;">
+        Sets drive and rotation max speed. Allows for 0.5x to 1.5x normal max speed; does not change acceleration. Higher speeds increase stopping distance.
+      </div>
+    </p>
+
+    <h2 style="margin-bottom: 5px;">Status:</h2>
+    <table style="border:1px dotted #000000;">
+      <tr>
+        <td>Connection Status:</td><td id="connection_status">LOADING</td>
+      </tr>
+      <tr>
+        <td>Robot Battery Level:</td><td id="battery_level">LOADING</td>
+      </tr>
+      <tr>
+        <td>Robot Charging Status:</td><td id="charging_status">LOADING</td>
+      </tr>
+      <tr>
+        <td>Laptop Battery Level:</td><td id="laptop_battery_level">LOADING</td>
+      </tr>
+      <tr>
+        <td>Laptop Charging Status:</td><td id="laptop_charging_status">LOADING</td>
+      </tr>
+    </table>
+    <div style="color:gray;">
+      Refreshes approximately once per second.
+    </div>
+  </body>
+  <script>
+    kAKey = 65;
+    kLeftArrow = 37;
+    kWKey = 87;
+    kUpArrow = 38;
+    kDKey = 68;
+    kRightArrow = 39;
+    kSKey = 83;
+    kDownArrow = 40;
+    kRobotName = "{{ robot_name }}";
+    kForward = "forward";
+    kBackward = "backward";
+    kLeft = "left";
+    kRight = "right";
+
+    kCommandStatus = {};
+    kCommandStatus[kForward] = false;
+    kCommandStatus[kBackward] = false;
+    kCommandStatus[kLeft] = false;
+    kCommandStatus[kRight] = false;
+    kCommandStatus.robot = kRobotName;
+    kCommandStatus.use_safety_system = true;
+    kCommandStatus.speed = 1.0;
+
+    kKeyCount = {};
+    kKeyCount[kForward] = 0;
+    kKeyCount[kBackward] = 0;
+    kKeyCount[kLeft] = 0;
+    kKeyCount[kRight] = 0;
+
+    kKeyRepeatCount = 5;
+
+    function speed_change(new_speed) {
+      kCommandStatus.speed = new_speed;
+      document.getElementById("speed").innerText = new_speed;
+    }
+
+    function safety_system_click(cb) {
+      kCommandStatus.use_safety_system = cb.checked;
+    }
+
+    function status_update_callback(response_text, ok_status) {
+      if (!ok_status) {
+        document.getElementById("connection_status").innerText = "Failed to connect to server!";
+        document.getElementById("connection_status").style.color = "red";
+        document.getElementById("battery_level").innerText = "Not connected";
+        document.getElementById("charging_status").innerText = "Not connected";
+        document.getElementById("laptop_battery_level").innerText = "Not connected";
+        document.getElementById("laptop_charging_status").innerText = "Not connected";
+        return;
+      }
+
+      response = JSON.parse(response_text);
+      let is_robot_connected = (response["delta_time"] < 2);
+      if (is_robot_connected) {
+        document.getElementById("connection_status").innerText = "Connected";
+        document.getElementById("connection_status").style.color = "green";
+        document.getElementById("battery_level").innerText = response["battery"];
+        document.getElementById("charging_status").innerText = (response["is_charging"]) ? "Charging" : "Discharging";
+        document.getElementById("laptop_battery_level").innerText = response["laptop_percentage"];
+        document.getElementById("laptop_charging_status").innerText = response["laptop_state"];
+        return;
+      }
+      document.getElementById("connection_status").innerText = "Cannot connect to robot!";
+      document.getElementById("connection_status").style.color = "red";
+      document.getElementById("battery_level").innerText = "Not connected";
+      document.getElementById("charging_status").innerText = "Not connected";
+      document.getElementById("laptop_battery_level").innerText = "Not connected";
+      document.getElementById("laptop_charging_status").innerText = "Not connected";
+    }
+
+    function get_status(url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4){
+          let ok_status = (xhr.status === 200);
+          callback(xhr.responseText, ok_status);
+        }
+      };
+      xhr.open("GET", url, true);
+      xhr.send(null);
+    }
+
+    function update_robot_status() {
+      get_status("{{ status_update_path }}", status_update_callback);
+      setTimeout(update_robot_status, 1000);
+    }
+    update_robot_status();
+
+    function send_command() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "{{ server_url }}", true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(kCommandStatus));
+    }
+
+    function start(direction) {
+      kCommandStatus[direction] = true;
+      send_command();
+    }
+
+    function stop(direction) {
+      kCommandStatus[direction] = false;
+      send_command();
+    }
+
+    function key_down(e) {
+      switch (e.keyCode) {
+        case kUpArrow:
+        case kWKey: {
+          ++kKeyCount[kForward];
+          if (!e.repeat || (kKeyCount[kForward] % kKeyRepeatCount === 0)) {
+            start(kForward);
+          }
+          break;
+        }
+        case kDownArrow:
+        case kSKey: {
+          ++kKeyCount[kBackward];
+          if (!e.repeat || (kKeyCount[kBackward] % kKeyRepeatCount === 0)) {
+            start(kBackward);
+          }
+          break;
+        }
+        case kLeftArrow:
+        case kAKey: {
+          ++kKeyCount[kLeft];
+          if (!e.repeat || (kKeyCount[kLeft] % kKeyRepeatCount === 0)) {
+            start(kLeft);
+          }
+          break;
+        }
+        case kRightArrow:
+        case kDKey: {
+          ++kKeyCount[kRight];
+          if (!e.repeat || (kKeyCount[kRight] % kKeyRepeatCount === 0)) {
+            start(kRight);
+          }
+          break;
+        }
+      }
+    }
+
+    function key_up(e) {
+      switch (e.keyCode) {
+        case kUpArrow:
+        case kWKey: {
+          stop(kForward);
+          kKeyCount[kForward] = 0;
+          break;
+        }
+        case kDownArrow:
+        case kSKey: {
+          stop(kBackward);
+          kKeyCount[kBackward] = 0;
+          break;
+        }
+        case kLeftArrow:
+        case kAKey: {
+          stop(kLeft);
+          kKeyCount[kLeft] = 0;
+          break;
+        }
+        case kRightArrow:
+        case kDKey: {
+          stop(kRight);
+          kKeyCount[kRight] = 0;
+          break;
+        }
+      }
+    }
+
+    document.onkeydown = key_down;
+    document.onkeyup = key_up;
+
+  </script>
+</html>
