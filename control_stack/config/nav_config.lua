@@ -41,10 +41,11 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- kMap = "../rosbuild_ws/simulator/f1tenth_simulator/maps/GDC3.txt";
-  map = "src/control_stack/maps/outside_grasp.map";
-  map = "src/control_stack/maps/fourthfloorloop.map";
-  goal_poses = get_goals();
-  start_pose = get_goals()[3];
+  map = "src/CrowdNav/control_stack/maps/outside_grasp.map"; -- irrelevant
+
+  -- temporarily hardcoding start position and global goal
+  goal_poses = {{24,24,0.2}}; --get_goals();
+  start_pose = {10,10,0}; --get_goals()[3];
 
   kRobotRadius = 0.1;
   kSafetyMargin = 0.16;

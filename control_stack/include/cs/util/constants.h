@@ -31,7 +31,7 @@ static constexpr float kSqrtTwo = 1.414213562;
 
 namespace constants {
 static constexpr auto kPositionTopic = "/localization_position";
-static constexpr auto kCommandVelocityTopic = "/mobile_base/commands/velocity";
+static constexpr auto kCommandVelocityTopic = "/cmd_vel"; //mobile_base/commands/velocity";
 static constexpr auto kOdomTopic = "/odom";
 static constexpr auto kLaserTopic = "/scan";
 static constexpr auto kGoalTopic = "/nav_goal";
