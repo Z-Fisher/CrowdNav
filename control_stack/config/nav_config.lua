@@ -27,7 +27,7 @@ laser = {
 };
 
 state_estimation = {
-  use_sim_ground_truth = false;
+  use_sim_ground_truth = true;
 };
 
 function get_goals()

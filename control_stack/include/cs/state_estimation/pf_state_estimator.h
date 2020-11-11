@@ -87,12 +87,6 @@ class PFStateEstimator : public StateEstimator {
     estimated_pose_ = pf_.WeightedCentroid();
   }
 
-  void UpdateGT(const util::Pose& pose, const util::Twist& twist) {
-    (void)twist;
-    estimated_pose_ = pose;
-    ROS_INFO("Robot pose: %f, %f", pose.tra.x(), pose.tra.y());
-  }
-
   void UpdateLastCommand(const util::Twist& cmd) { last_command_ = cmd; }
 
   util::Pose GetEstimatedPose() const { return estimated_pose_; }

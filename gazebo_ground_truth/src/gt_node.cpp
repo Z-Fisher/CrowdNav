@@ -6,7 +6,7 @@
 #include <string> 
 
 
-void agent_callback(const gazebo_msgs::ModelStates& msg) {
+void modelstate_callback(const gazebo_msgs::ModelStates& msg) {
     for (int i = 0; i < msg.name.size(); i++) {
         std::string agent_name = msg.name[i];
         geometry_msgs::Twist agent_twist = msg.twist[i];
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     ros::NodeHandle n;
     ros::Subscriber agent_sub = n.subscribe("gazebo/model_states",
                                             1, 
-                                            agent_callback);
+                                            modelstate_callback);
     ros::spin();
     return 0;
 }

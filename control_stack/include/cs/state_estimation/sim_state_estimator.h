@@ -33,6 +33,9 @@
 #include "cs/util/map.h"
 #include "cs/util/pose.h"
 #include "cs/util/twist.h"
+#include "gazebo_msgs/ModelStates.h"
+#include "geometry_msgs/Pose.h"
+#include "geometry_msgs/Twist.h"
 
 namespace cs {
 namespace state_estimation {
@@ -58,8 +61,44 @@ class SimStateEstimator : public StateEstimator {
     return static_cast<float>(total_time_delta / iterations);
   }
 
-  void GroundTruthLocationCallback(const geometry_msgs::PoseStamped& pose) {
-    ground_truth_pose_ = util::Pose(pose.pose);
+  void GazeboGroundTruthCallback(const gazebo_msgs::ModelStates& msg) {
+    // constants for finding robot name 
+    std::string model_name = "turtlebot3_waffle_pi";
+    int robot_idx = -1;
+    
+    // loop through all the models
+    for (int i = 0; i < (int)msg.name.size(); ++i) {
+      if (msg.name[i] == model_name) {
+        robot_idx = i;
+      }
+    }
+
+    // gather robot pose
+    ground_truth_pose_ = util::Pose(msg.pose[robot_idx]);
+    last_odom_velocity_ = util::Twist(msg.twist[robot_idx]);
+    //util::Twist robot_twist = util::Twist(msg.twist[robot_idx]);
+    /*
+    // update robot state. was exploring mimicking the odom and laser update method but commented everything out. 
+    state_estimator_->UpdateGT(robot_pose, robot_twist);
+    
+    // print all gazebo model names that are numbers (pedestrians only)
+    for (size_t i = 0; i < msg.name.size(); i++) {
+      std::string agent_name = msg.name[i];
+      geometry_msgs::Twist agent_twist = msg.twist[i];
+      geometry_msgs::Pose agent_pose = msg.pose[i];
+      (void)agent_pose;
+      (void)agent_twist;
+      
+      try {
+        int agent_num = std::stoi(agent_name);
+        (void)agent_num;
+        // do some other stuff here
+      } catch (const std::invalid_argument& ia) {
+        continue;
+      }
+      //ROS_INFO("Agent name: %s", agent_name.c_str());
+    }
+    */
   }
 
  public:
@@ -67,9 +106,9 @@ class SimStateEstimator : public StateEstimator {
   explicit SimStateEstimator(ros::NodeHandle* n)
       : ground_truth_pose_(), last_odom_velocity_() {
     ground_truth_pose_sub_ =
-        n->subscribe("/simulator_true_pose",
+        n->subscribe("gazebo/model_states",
                      10,
-                     &SimStateEstimator::GroundTruthLocationCallback,
+                     &SimStateEstimator::GazeboGroundTruthCallback,
                      this);
   }
   ~SimStateEstimator() = default;
@@ -84,11 +123,6 @@ class SimStateEstimator : public StateEstimator {
   }
 
   void UpdateLastCommand(const util::Twist& cmd) { last_odom_velocity_ = cmd; }
-
-  void UpdateGT(const util::Pose& pose, const util::Twist& twist) { 
-    (void)twist;
-    ground_truth_pose_ = pose;
-  }
 
   util::Pose GetEstimatedPose() const { return ground_truth_pose_; }
 

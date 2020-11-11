@@ -23,26 +23,12 @@ int main(int argc, char** argv) {
   cs::main::DebugPubWrapper dpw(&n, pub_sub_prefix);
   cs::main::StateMachine state_machine(&dpw, &n, pub_sub_prefix);
   
-  // setup ground truth subscriber as alternate to perceptual data
-  ros::Subscriber agent_sub = n.subscribe("gazebo/model_states",
-                                          1, 
-                                          &cs::main::StateMachine::UpdateGT,
-                                          &state_machine);
-  
-  /*
-  // setup odometry subscriber
-  ros::Subscriber odom_sub = n.subscribe(pub_sub_prefix + constants::kOdomTopic,
-                                         1,
-                                         &cs::main::StateMachine::UpdateOdom,
-                                         &state_machine);
-  
   // setup laser sub subscriber
   ros::Subscriber laser_sub =
       n.subscribe(pub_sub_prefix + constants::kLaserTopic,
                   1,
                   &cs::main::StateMachine::UpdateLaser,
                   &state_machine);
-  */
 
   // setup command publisher
   ros::Publisher command_pub = n.advertise<geometry_msgs::Twist>(

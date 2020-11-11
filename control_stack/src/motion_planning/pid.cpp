@@ -92,6 +92,8 @@ util::Twist PIDController::DriveToPose(
   const auto est_velocity_ = state_estimator_.GetEstimatedVelocity();
 
   const auto proposed_command = ProposeCommand(waypoint);
+  ROS_INFO("Robot speed: %f, %f", proposed_command.tra.x(), proposed_command.tra.y());
+
   const auto limited_command = ApplyCommandLimits(proposed_command);
 
   const auto limited_command_res =

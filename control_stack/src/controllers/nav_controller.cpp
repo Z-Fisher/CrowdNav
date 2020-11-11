@@ -174,7 +174,8 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   }
 
   DrawGoal(dpw_, local_waypoint);
-
+  // TODO: remove
+  //ROS_INFO("Local Waypoint: %f, %f", local_waypoint.tra.x(), local_waypoint.tra.y());
   const util::Twist command = motion_planner_.DriveToPose(
       obstacle_detector_.GetDynamicFeatures(), local_waypoint);
 
