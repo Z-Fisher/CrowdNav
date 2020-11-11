@@ -41,7 +41,7 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- kMap = "../rosbuild_ws/simulator/f1tenth_simulator/maps/GDC3.txt";
-  map = "src/CrowdNav/control_stack/maps/outside_grasp.map"; -- irrelevant
+  map = "src/CrowdNav/control_stack/maps/empty.map"; -- irrelevant
 
   -- temporarily hardcoding start position and global goal
   goal_poses = {{24,24,0.2}}; --get_goals();

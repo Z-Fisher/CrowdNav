@@ -315,12 +315,12 @@ class StateMachine {
     state_estimator_->UpdateOdom(odom_, odom_update_time_);
   }
 
-  void UpdatePedsGt(const gazebo_msgs::ModelStates& msg) {
+  void UpdateGT(const gazebo_msgs::ModelStates& msg) {
 
     // TODO: move this so it isn't repeated
     // find index of robot's name 
     std::string model_name = "turtlebot3_waffle_pi";
-    int robot_idx;
+    int robot_idx = -1;
     for (int i = 0; i < (int)msg.name.size(); ++i) {
         if (msg.name[i] == model_name) {
           robot_idx = i;
@@ -328,15 +328,14 @@ class StateMachine {
     }
 
     // gather robot pose
-    geometry_msgs::Twist robot_twist = msg.twist[robot_idx];
-    geometry_msgs::Pose robot_pose = msg.pose[robot_idx];
-    (void)robot_twist;
-    (void)robot_pose;
+    //geometry_msgs::Twist robot_twist = msg.twist[robot_idx];
+    //geometry_msgs::Pose robot_pose = msg.pose[robot_idx];
+    util::Pose robot_pose = util::Pose(msg.pose[robot_idx]);
+    util::Twist robot_twist = util::Twist(msg.twist[robot_idx]);
 
     // update robot state. was exploring mimicking the odom and laser update method but commented everything out. 
-    //state_estimator_->UpdateRobot(robot_pose, robot_twist);
+    state_estimator_->UpdateGT(robot_pose, robot_twist);
     
-
     // print all gazebo model names that are numbers (pedestrians only)
     for (size_t i = 0; i < msg.name.size(); i++) {
       std::string agent_name = msg.name[i];
@@ -353,13 +352,14 @@ class StateMachine {
         continue;
       }
 
-      ROS_INFO("Agent name: %s", agent_name.c_str());
+      //ROS_INFO("Agent name: %s", agent_name.c_str());
     }
     
   }
 
   util::Twist ExecuteController() {
     const auto est_pose = state_estimator_->GetEstimatedPose();
+    ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
     dpw_->position_pub_.publish(est_pose.ToTwist());
     obstacle_detector_.UpdateObservation(
         est_pose, laser_, &(dpw_->detected_walls_pub_));

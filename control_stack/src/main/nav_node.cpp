@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
   // setup ground truth subscriber as alternate to perceptual data
   ros::Subscriber agent_sub = n.subscribe("gazebo/model_states",
                                           1, 
-                                          &cs::main::StateMachine::UpdatePedsGt,
+                                          &cs::main::StateMachine::UpdateGT,
                                           &state_machine);
   
   /*

@@ -85,6 +85,11 @@ class SimStateEstimator : public StateEstimator {
 
   void UpdateLastCommand(const util::Twist& cmd) { last_odom_velocity_ = cmd; }
 
+  void UpdateGT(const util::Pose& pose, const util::Twist& twist) { 
+    (void)twist;
+    ground_truth_pose_ = pose;
+  }
+
   util::Pose GetEstimatedPose() const { return ground_truth_pose_; }
 
   util::Twist GetEstimatedVelocity() const { return last_odom_velocity_; }
