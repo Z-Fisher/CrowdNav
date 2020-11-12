@@ -76,10 +76,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 0.2;
-  kMaxTraVel = 1;
-  kMaxRotAcc = 2.5;
-  kMaxRotVel = 1;
+  kMaxTraAcc = 10; -- previously 0.2
+  kMaxTraVel = 50; -- previously 1
+  kMaxRotAcc = 10; -- previously 2.5
+  kMaxRotVel = 10; -- previously 1
 };
 
 safety = {
@@ -95,8 +95,8 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.4; -- Radians.
-  rotation_p = 0.95;
+  rotation_drive_threshold = 0.1; -- Radians.
+  rotation_p = 0.95; 
   rotation_i = 0.0;
   translation_p = 0.5;
   stop_past_goal_threshold = 0.75;

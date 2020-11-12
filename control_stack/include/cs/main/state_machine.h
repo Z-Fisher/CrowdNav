@@ -126,7 +126,7 @@ struct ControllerList {
       }
       const auto execute_result =
           controller_array[current_controller_]->Execute();
-      //ROS_INFO("Robot speed: %f, %f", execute_result.second.tra.x(), execute_result.second.tra.y());
+      ROS_INFO("Robot speed: %f, %f", execute_result.second.tra.x(), execute_result.second.tra.y());
 
       if (execute_result.first == current_controller_) {
         return execute_result.second;
@@ -316,14 +316,10 @@ class StateMachine {
   
   util::Twist ExecuteController() {
     const auto est_pose = state_estimator_->GetEstimatedPose();
-    // TODO: remove
-    ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
     dpw_->position_pub_.publish(est_pose.ToTwist());
     obstacle_detector_.UpdateObservation(
         est_pose, laser_, &(dpw_->detected_walls_pub_));
     const util::Twist command = controller_list_.Execute();
-    // TODO: remove
-    //ROS_INFO("Robot speed: %f, %f", command.tra.x(), command.tra.y());
     state_estimator_->UpdateLastCommand(command);
     PublishTransforms();
     state_estimator_->Visualize(&(dpw_->particle_pub_));

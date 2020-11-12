@@ -92,7 +92,8 @@ util::Twist PIDController::DriveToPose(
   const auto est_velocity_ = state_estimator_.GetEstimatedVelocity();
 
   const auto proposed_command = ProposeCommand(waypoint);
-  ROS_INFO("Robot speed: %f, %f", proposed_command.tra.x(), proposed_command.tra.y());
+  // TODO: remove me
+  ROS_INFO("Proposed command: %f, %f", proposed_command.tra.x(), proposed_command.tra.y());
 
   const auto limited_command = ApplyCommandLimits(proposed_command);
 
@@ -184,10 +185,13 @@ util::Twist PIDController::ProposeCommand(const util::Pose& waypoint) const {
   }
 
   const float robot_angle = est_world_pose_.rot;
+  ROS_INFO("ROBOT ANGLE: %f", robot_angle);
+
   const Eigen::Vector2f robot_to_waypoint_delta =
       waypoint.tra - est_world_pose_.tra;
   const float robot_to_waypoint_angle =
       std::atan2(robot_to_waypoint_delta.y(), robot_to_waypoint_delta.x());
+  ROS_INFO("ROBOT TO WAYPOINT ANGLE: %f", robot_to_waypoint_angle);
 
   NP_FINITE(robot_angle);
   NP_FINITE_VEC(robot_to_waypoint_delta);
@@ -195,6 +199,7 @@ util::Twist PIDController::ProposeCommand(const util::Pose& waypoint) const {
 
   const float robot_to_waypoint_angle_delta =
       math_util::AngleDiff(robot_angle, robot_to_waypoint_angle);
+  ROS_INFO("Angle delta: %f", robot_to_waypoint_angle_delta);
   NP_FINITE_MSG(robot_to_waypoint_angle_delta,
                 "Robot angle: " << robot_angle << " robot to waypoint angle: "
                                 << robot_to_waypoint_angle);
@@ -202,15 +207,18 @@ util::Twist PIDController::ProposeCommand(const util::Pose& waypoint) const {
                    robot_to_waypoint_angle_delta <= (kPi + kEpsilon),
                robot_to_waypoint_angle_delta);
   float x = 0;
+  bool turning = true;
   if (std::abs(robot_to_waypoint_angle_delta) <
       params::CONFIG_rotation_drive_threshold) {
     x = robot_to_waypoint_delta.norm();
+    turning = false;
   }
+  ROS_INFO("L2 Norm to Goal: %f", x);
 
   util::Twist proposed_command(
       x * params::CONFIG_translation_p,
       0,
-      -robot_to_waypoint_angle_delta * params::CONFIG_rotation_p);
+      turning * (-robot_to_waypoint_angle_delta * params::CONFIG_rotation_p));
 
   const TrajectoryRollout tr(state_estimator_.GetEstimatedPose(),
                              state_estimator_.GetEstimatedVelocity(),
