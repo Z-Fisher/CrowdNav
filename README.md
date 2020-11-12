@@ -20,3 +20,5 @@ Ensure that you are in the ws level of your directory
 $ roslaunch pedsim_simulator combo.launch 
 
 $ rosrun control_stack nav_node
+
+$ roslaunch obstacle_detector nodes.launch
