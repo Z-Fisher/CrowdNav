@@ -143,6 +143,9 @@ void NavController::RefreshGoal() {
 
 std::pair<ControllerType, util::Twist> NavController::Execute() {
   const auto est_pose = state_estimator_.GetEstimatedPose();
+  ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
+  ROS_INFO("Robot speed: %f, %f", command.tra.x(), command.tra.y());
+
   const auto laser_points_wf = laser_.TransformPointsFrameSparse(
       est_pose.ToAffine(), [this](const float& d) {
         return (d > laser_.ros_laser_scan_.range_min) &&
@@ -163,7 +166,6 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   DrawPath(dpw_, global_path, "global_path");
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
-
   const auto local_path = local_path_finder_.FindPath(
       obstacle_detector_.GetDynamicFeatures(), est_pose.tra, global_waypoint);
   util::Pose local_waypoint =
@@ -174,7 +176,6 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   }
 
   DrawGoal(dpw_, local_waypoint);
-
   const util::Twist command = motion_planner_.DriveToPose(
       obstacle_detector_.GetDynamicFeatures(), local_waypoint);
 

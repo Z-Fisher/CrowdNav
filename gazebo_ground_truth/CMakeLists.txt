@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(nav_stack)
+project(gazebo_ground_truth)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,10 +8,12 @@ project(nav_stack)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_msgs
   gazebo_ros
   geometry_msgs
   pedsim_msgs
   roscpp
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -71,7 +73,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   pedsim_msgs
+#   gazebo_msgs#   geometry_msgs#   pedsim_msgs#   std_msgs
 # )
 
 ################################################
@@ -105,8 +107,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES nav_stack
-#  CATKIN_DEPENDS gazebo_ros geometry_msgs pedsim_msgs roscpp
+#  LIBRARIES gazebo_ground_truth
+#  CATKIN_DEPENDS gazebo_msgs gazebo_ros geometry_msgs pedsim_msgs roscpp std_msgs
 #  DEPENDS system_lib
 )
 
@@ -123,7 +125,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/nav_stack.cpp
+#   src/${PROJECT_NAME}/gazebo_ground_truth.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -134,7 +136,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/nav_stack_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/gazebo_ground_truth_node.cpp)
 add_executable(gt_node src/gt_node.cpp)
 target_link_libraries(gt_node ${catkin_LIBRARIES})
 
@@ -200,7 +202,7 @@ target_link_libraries(gt_node ${catkin_LIBRARIES})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_nav_stack.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_gazebo_ground_truth.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
