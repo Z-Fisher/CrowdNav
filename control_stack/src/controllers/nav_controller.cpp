@@ -144,7 +144,6 @@ void NavController::RefreshGoal() {
 std::pair<ControllerType, util::Twist> NavController::Execute() {
   const auto est_pose = state_estimator_.GetEstimatedPose();
   ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
-  ROS_INFO("Robot speed: %f, %f", command.tra.x(), command.tra.y());
 
   const auto laser_points_wf = laser_.TransformPointsFrameSparse(
       est_pose.ToAffine(), [this](const float& d) {
