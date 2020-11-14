@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   rosbag
   std_msgs
+  geometry_msgs
 )
 
 
@@ -26,6 +27,9 @@ find_package(catkin REQUIRED COMPONENTS
 # find_package(Boost REQUIRED COMPONENTS system)
 find_package(Eigen3 REQUIRED)
 find_package(Ceres REQUIRED)
+
+add_message_files(FILES CircleObstacle.msg SegmentObstacle.msg Obstacles.msg)
+generate_messages(DEPENDENCIES std_msgs geometry_msgs)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -113,9 +117,9 @@ find_package(Ceres REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES control_stack
-  CATKIN_DEPENDS roscpp rospy std_msgs
+  INCLUDE_DIRS include
+  LIBRARIES control_stack
+  CATKIN_DEPENDS roscpp rospy std_msgs geometry_msgs
 #  DEPENDS
 )
 
@@ -239,6 +243,7 @@ TARGET_LINK_LIBRARIES(control_stack_unit_tests gtest gtest_main util_lib amrl_sh
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+
 
 #############
 ## Testing ##
