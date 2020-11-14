@@ -5,7 +5,6 @@
 #include <string>
 #include <control_stack/Obstacles.h>
 
-
 namespace params {
 CONFIG_STRING(map, "pf.map");
 }
