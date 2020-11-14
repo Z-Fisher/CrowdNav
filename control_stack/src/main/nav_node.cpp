@@ -12,8 +12,15 @@ CONFIG_STRING(map, "pf.map");
 
 
 void obstacle_callback(const control_stack::Obstacles::ConstPtr& msg) {
-  ROS_INFO("I heard: [%f]", msg->circles[0].center.x);
+  //ROS_INFO("num peds: [%f]", msg->circles[0]);
+  ROS_INFO("x_pos: [%f]", msg->circles[0].center.x);
+  ROS_INFO("y_pos: [%f]", msg->circles[0].center.y);
+  ROS_INFO("x_vel: [%f]", msg->circles[0].velocity.x);
+  ROS_INFO("y_vel: [%f]", msg->circles[0].velocity.y);
+  ROS_INFO("ped_radius: [%f]", msg->circles[0].radius);
 }
+
+// TODO struct of peds with info (circle info only)
 
 
 int main(int argc, char** argv) {
@@ -41,7 +48,7 @@ int main(int argc, char** argv) {
 
   ros::Subscriber obstacle_sub =
     n.subscribe("/obstacles",
-                1000,
+                1,
                 obstacle_callback);
 
   // setup command publisher
