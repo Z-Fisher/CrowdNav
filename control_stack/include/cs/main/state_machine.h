@@ -144,12 +144,13 @@ class StateMachine {
  private:
   util::LaserScan laser_;
   ros::Time laser_update_time_;
+  ros::Time ped_update_time_;
   util::Twist odom_;
   ros::Time odom_update_time_;
   cs::main::DebugPubWrapper* dpw_;
   util::vector_map::VectorMap map_;
   std::unique_ptr<state_estimation::StateEstimator> state_estimator_;
-  std::unique_ptr<ped_detector::PedDetector> ped_detector_;
+  std::unique_ptr<ped_detection::PedDetector> ped_detector_;
   obstacle_avoidance::ObstacleDetector obstacle_detector_;
   motion_planning::PIDController motion_planner_;
   std::unique_ptr<motion_planning::CommandScaler> command_scaler_;
@@ -174,8 +175,8 @@ class StateMachine {
   }
 
     
-  cs::ped_detector::PedDetector* MakePedDetector() {
-      return new cs::ped_detector::PedDetector();
+  cs::ped_detection::PedDetector* MakePedDetector() {
+      return new cs::ped_detection::PedDetector();
     }
   cs::motion_planning::CommandScaler* MakeCommandScaler() {
     if (params::CONFIG_command_scaler == "turtlebot") {

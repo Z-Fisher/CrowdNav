@@ -31,7 +31,7 @@ class PedDetector {
   }
 
  public:
-  PedDetector() = delete;
+  // PedDetector() = delete;
   // PedDetector() {}
   // ~PedDetector() = default;
 
@@ -45,6 +45,7 @@ class PedDetector {
   }
 
   float GetTimeDelta() const { return GetTimeDelta(laser_times_); }
+};
 
 }  // namespace ped_detector
 }  // namespace cs
