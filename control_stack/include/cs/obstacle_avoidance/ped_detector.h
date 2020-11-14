@@ -8,23 +8,44 @@
 #include "cs/util/map.h"
 #include "cs/util/pose.h"
 #include "cs/util/twist.h"
+#include "cs/util/datastructures/circular_buffer.h"
 
 namespace cs {
 namespace ped_detection {
 
 class PedDetector {
+ private:
+  float obstacle_dummy_ = 31;
+  static constexpr size_t kTimeBufferSize = 5;
+  cs::datastructures::CircularBuffer<ros::Time, kTimeBufferSize> laser_times_;
+
+  float GetTimeDelta(
+      const cs::datastructures::CircularBuffer<ros::Time, kTimeBufferSize>& b)
+      const {
+    if (b.size() <= 1) {
+      return kEpsilon;
+    }
+    const double total_time_delta = (b.back() - b.front()).toSec();
+    const double iterations = static_cast<double>(b.size() - 1);
+    return static_cast<float>(total_time_delta / iterations);
+  }
+
  public:
-  PedDetector() = default;
-  virtual ~PedDetector() = default;
+  PedDetector() = delete;
+  PedDetector() {}
+  ~PedDetector() = default;
 
-  virtual void UpdatePeds(const util::LaserScan& laser,
-                           const ros::Time& time) = 0;  // currently takes in laser but needs to take in Obstacle
+  void UpdatePeds(const util::LaserScan& laser, const ros::Time& time) {
+    NP_CHECK(laser.ros_laser_scan_.header.stamp == time);
+    laser_times_.push_back(time);
+  }
 
+  float GetPeds() const {
+    return obstacle_dummy;
+  }
 
-  virtual util::Pose GetEstimatedPeds() const = 0; // currently returns Pose but needs to return ped data
+  float GetTimeDelta() const { return GetTimeDelta(laser_times_); }
 
-  virtual float GetPedsTimeDelta() const = 0;
-};
-
-}  // namespace state_estimation
+}  // namespace ped_detector
 }  // namespace cs
+
