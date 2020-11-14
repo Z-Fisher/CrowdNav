@@ -41,6 +41,7 @@
 #include "cs/motion_planning/pid.h"
 #include "cs/motion_planning/turtlebot_command_scaler.h"
 #include "cs/obstacle_avoidance/obstacle_detector.h"
+#include "cs/obstacle_avoidance/ped_detector.h"
 #include "cs/path_finding/astar.h"
 #include "cs/path_finding/global_path_finder.h"
 #include "cs/state_estimation/pf_state_estimator.h"
@@ -143,11 +144,13 @@ class StateMachine {
  private:
   util::LaserScan laser_;
   ros::Time laser_update_time_;
+  ros::Time ped_update_time_;
   util::Twist odom_;
   ros::Time odom_update_time_;
   cs::main::DebugPubWrapper* dpw_;
   util::vector_map::VectorMap map_;
   std::unique_ptr<state_estimation::StateEstimator> state_estimator_;
+  std::unique_ptr<ped_detection::PedDetector> ped_detector_;
   obstacle_avoidance::ObstacleDetector obstacle_detector_;
   motion_planning::PIDController motion_planner_;
   std::unique_ptr<motion_planning::CommandScaler> command_scaler_;
@@ -162,6 +165,7 @@ class StateMachine {
       ROS_INFO("Using sim ground truth for state estimation");
       return new cs::state_estimation::SimStateEstimator(n);
     }
+
     ROS_INFO("Using PF for state estimation initialized at (%f, %f), %f",
              params::CONFIG_start_pose.x(),
              params::CONFIG_start_pose.y(),
@@ -169,6 +173,11 @@ class StateMachine {
     return new cs::state_estimation::PFStateEstimator(
         map_, util::Pose(params::CONFIG_start_pose));
   }
+
+    
+  cs::ped_detection::PedDetector* MakePedDetector() {
+      return new cs::ped_detection::PedDetector();
+    }
   cs::motion_planning::CommandScaler* MakeCommandScaler() {
     if (params::CONFIG_command_scaler == "turtlebot") {
       return new cs::motion_planning::TurtlebotCommandScaler();
@@ -273,6 +282,7 @@ class StateMachine {
       : dpw_(dpw),
         map_(params::CONFIG_map),
         state_estimator_(MakeStateEstimator(n)),
+        ped_detector_(MakePedDetector()),
         obstacle_detector_(),
         motion_planner_(map_, *state_estimator_),
         command_scaler_(MakeCommandScaler()),
@@ -306,6 +316,11 @@ class StateMachine {
     laser_ = laser;
     laser_update_time_ = msg.header.stamp;
     state_estimator_->UpdateLaser(laser_, laser_update_time_);
+  }
+
+  void UpdatePeds(const sensor_msgs::LaserScan& msg) {
+    ped_update_time_ = msg.header.stamp;
+    ped_detector_->UpdatePeds(laser_, ped_update_time_);
   }
 
   void UpdateOdom(const nav_msgs::Odometry& msg) {
