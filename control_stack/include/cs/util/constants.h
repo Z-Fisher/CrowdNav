@@ -29,9 +29,9 @@ static constexpr float kEpsilon = 0.00001f;
 static constexpr float kPi = M_PI;
 static constexpr float kSqrtTwo = 1.414213562;
 
-namespace constants {
+namespace constants {  
 static constexpr auto kPositionTopic = "/localization_position";
-static constexpr auto kCommandVelocityTopic = "/cmd_vel"; //mobile_base/commands/velocity";
+static constexpr auto kCommandVelocityTopic = "/cmd_vel"; 
 static constexpr auto kOdomTopic = "/odom";
 static constexpr auto kLaserTopic = "/scan";
 static constexpr auto kGoalTopic = "/nav_goal";

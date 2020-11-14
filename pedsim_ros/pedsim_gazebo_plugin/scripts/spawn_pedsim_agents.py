@@ -17,6 +17,26 @@ global xml_file
 
 def actor_poses_callback(actors):
 
+    # default code
+    for actor in actors.agent_states:
+        actor_id = str( actor.id )
+        actor_pose = actor.pose
+        rospy.loginfo("Spawning model: actor_id = %s", actor_id)
+
+        model_pose = Pose(Point(x= actor_pose.position.x,
+                               y= actor_pose.position.y,
+                               z= actor_pose.position.z),
+                         Quaternion(actor_pose.orientation.x,
+                                    actor_pose.orientation.y,
+                                    actor_pose.orientation.z,
+                                    actor_pose.orientation.w) )
+
+        spawn_model(actor_id, xml_string, "", model_pose, "world")
+    rospy.signal_shutdown("all agents have been spawned !")
+
+
+    # code for continuous spawning and despawning
+    '''
     # delete actors
     if len(existing_actors) > 8:
         delete_model_prox(existing_actors[1]) 
@@ -49,6 +69,7 @@ def actor_poses_callback(actors):
             existing_actors.append(actor_id)
     
     #rospy.signal_shutdown("all agents have been spawned !")
+    '''
 
 
 

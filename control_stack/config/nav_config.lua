@@ -27,7 +27,7 @@ laser = {
 };
 
 state_estimation = {
-  use_sim_ground_truth = false;
+  use_sim_ground_truth = true;
 };
 
 function get_goals()
@@ -41,7 +41,7 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- kMap = "../rosbuild_ws/simulator/f1tenth_simulator/maps/GDC3.txt";
-  map = "src/CrowdNav/control_stack/maps/outside_grasp.map"; -- irrelevant
+  map = "src/CrowdNav/control_stack/maps/empty.map"; -- irrelevant
 
   -- temporarily hardcoding start position and global goal
   goal_poses = {{24,24,0.2}}; --get_goals();
@@ -76,10 +76,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 0.2;
-  kMaxTraVel = 1;
-  kMaxRotAcc = 2.5;
-  kMaxRotVel = 1;
+  kMaxTraAcc = 10; -- previously 0.2
+  kMaxTraVel = 50; -- previously 1
+  kMaxRotAcc = 10; -- previously 2.5
+  kMaxRotVel = 10; -- previously 1
 };
 
 safety = {
@@ -95,8 +95,8 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.4; -- Radians.
-  rotation_p = 0.95;
+  rotation_drive_threshold = 0.1; -- Radians.
+  rotation_p = 0.95; 
   rotation_i = 0.0;
   translation_p = 0.5;
   stop_past_goal_threshold = 0.75;

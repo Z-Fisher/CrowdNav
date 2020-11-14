@@ -54,9 +54,6 @@
 #include "shared/math/geometry.h"
 #include "shared/math/math_util.h"
 #include "shared/util/timer.h"
-#include "gazebo_msgs/ModelStates.h"
-#include "geometry_msgs/Pose.h"
-#include "geometry_msgs/Twist.h"
 
 namespace cs {
 namespace main {
@@ -120,7 +117,7 @@ struct ControllerList {
   }
 
   util::Twist Execute() {
-    static constexpr bool kDebug = false;
+    static constexpr bool kDebug = true;
     for (int num_transitions = 0; num_transitions < 8; ++num_transitions) {
       NP_NOT_NULL(controller_array[current_controller_]);
       if (kDebug) {
@@ -129,6 +126,8 @@ struct ControllerList {
       }
       const auto execute_result =
           controller_array[current_controller_]->Execute();
+      ROS_INFO("Robot speed: %f, %f", execute_result.second.tra.x(), execute_result.second.tra.y());
+
       if (execute_result.first == current_controller_) {
         return execute_result.second;
       }
@@ -314,50 +313,7 @@ class StateMachine {
     odom_update_time_ = msg.header.stamp;
     state_estimator_->UpdateOdom(odom_, odom_update_time_);
   }
-
-  void UpdatePedsGt(const gazebo_msgs::ModelStates& msg) {
-
-    // TODO: move this so it isn't repeated
-    // find index of robot's name 
-    std::string model_name = "turtlebot3_waffle_pi";
-    int robot_idx;
-    for (int i = 0; i < (int)msg.name.size(); ++i) {
-        if (msg.name[i] == model_name) {
-          robot_idx = i;
-        }
-    }
-
-    // gather robot pose
-    geometry_msgs::Twist robot_twist = msg.twist[robot_idx];
-    geometry_msgs::Pose robot_pose = msg.pose[robot_idx];
-    (void)robot_twist;
-    (void)robot_pose;
-
-    // update robot state. was exploring mimicking the odom and laser update method but commented everything out. 
-    //state_estimator_->UpdateRobot(robot_pose, robot_twist);
-    
-
-    // print all gazebo model names that are numbers (pedestrians only)
-    for (size_t i = 0; i < msg.name.size(); i++) {
-      std::string agent_name = msg.name[i];
-      geometry_msgs::Twist agent_twist = msg.twist[i];
-      geometry_msgs::Pose agent_pose = msg.pose[i];
-      (void)agent_pose;
-      (void)agent_twist;
-      
-      try {
-        int agent_num = std::stoi(agent_name);
-        (void)agent_num;
-        // do some other stuff here
-      } catch (const std::invalid_argument& ia) {
-        continue;
-      }
-
-      ROS_INFO("Agent name: %s", agent_name.c_str());
-    }
-    
-  }
-
+  
   util::Twist ExecuteController() {
     const auto est_pose = state_estimator_->GetEstimatedPose();
     dpw_->position_pub_.publish(est_pose.ToTwist());
