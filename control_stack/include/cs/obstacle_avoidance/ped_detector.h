@@ -32,8 +32,8 @@ class PedDetector {
 
  public:
   PedDetector() = delete;
-  PedDetector() {}
-  ~PedDetector() = default;
+  // PedDetector() {}
+  // ~PedDetector() = default;
 
   void UpdatePeds(const util::LaserScan& laser, const ros::Time& time) {
     NP_CHECK(laser.ros_laser_scan_.header.stamp == time);
@@ -41,7 +41,7 @@ class PedDetector {
   }
 
   float GetPeds() const {
-    return obstacle_dummy;
+    return obstacle_dummy_;
   }
 
   float GetTimeDelta() const { return GetTimeDelta(laser_times_); }

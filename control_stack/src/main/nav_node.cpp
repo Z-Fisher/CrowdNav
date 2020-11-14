@@ -4,7 +4,6 @@
 #include "config_reader/config_reader.h"
 #include <string>
 
-
 namespace params {
 CONFIG_STRING(map, "pf.map");
 }

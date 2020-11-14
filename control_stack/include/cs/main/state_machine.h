@@ -149,7 +149,7 @@ class StateMachine {
   cs::main::DebugPubWrapper* dpw_;
   util::vector_map::VectorMap map_;
   std::unique_ptr<state_estimation::StateEstimator> state_estimator_;
-  std::unique_ptr<ped_estimation::PedDetector> ped_detector_;
+  std::unique_ptr<ped_detector::PedDetector> ped_detector_;
   obstacle_avoidance::ObstacleDetector obstacle_detector_;
   motion_planning::PIDController motion_planner_;
   std::unique_ptr<motion_planning::CommandScaler> command_scaler_;
