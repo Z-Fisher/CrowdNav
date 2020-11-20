@@ -68,9 +68,10 @@ NavController::NavController(
 
 void DrawPath(cs::main::DebugPubWrapper* dpw,
               const path_finding::Path2f& p,
-              const std::string& ns) {
+              const std::string& ns,
+              const int& color) {
   dpw->robot_path_pub_.publish(
-      visualization::DrawPath(p, params::CONFIG_map_tf_frame, ns));
+      visualization::DrawPath(p, params::CONFIG_map_tf_frame, ns, color));
 }
 
 void DrawGoal(cs::main::DebugPubWrapper* dpw, const util::Pose& goal) {
@@ -162,14 +163,14 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
 
   global_path_finder_.PlanPath(est_pose.tra, current_goal_.tra);
   const auto global_path = global_path_finder_.GetPath();
-  DrawPath(dpw_, global_path, "global_path");
+  DrawPath(dpw_, global_path, "global_path", 0);
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
   const auto local_path = local_path_finder_.FindPath(
       obstacle_detector_.GetDynamicFeatures(), est_pose.tra, global_waypoint);
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
-  DrawPath(dpw_, local_path, "local_path");
+  DrawPath(dpw_, local_path, "local_path", 1);
   if (local_path.waypoints.empty()) {
     ROS_INFO("Local path planner failed.");
   }

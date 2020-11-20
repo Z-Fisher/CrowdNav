@@ -43,6 +43,7 @@
 #include "cs/motion_planning/turtlebot_command_scaler.h"
 #include "cs/obstacle_avoidance/obstacle_detector.h"
 #include "cs/path_finding/astar.h"
+#include "cs/path_finding/rrt.h"
 #include "cs/path_finding/global_path_finder.h"
 #include "cs/state_estimation/pf_state_estimator.h"
 #include "cs/state_estimation/sim_state_estimator.h"

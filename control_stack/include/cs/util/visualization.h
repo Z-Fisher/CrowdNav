@@ -106,7 +106,8 @@ inline visualization_msgs::Marker DrawWalls(
 
 inline visualization_msgs::Marker DrawPath(const cs::path_finding::Path2f& path,
                                            const std::string& frame_id,
-                                           const std::string& ns) {
+                                           const std::string& ns,
+                                           const int& color) {
   visualization_msgs::Marker marker;
   marker.header.frame_id = frame_id;
   marker.header.stamp = ros::Time();
@@ -118,9 +119,27 @@ inline visualization_msgs::Marker DrawPath(const cs::path_finding::Path2f& path,
   marker.scale.y = 0.1;
   marker.scale.z = 0.1;
   marker.color.a = 1;
-  marker.color.r = 1;
-  marker.color.g = 0;
-  marker.color.b = 0;
+  
+  switch (color) {
+    case 0:  // red
+      marker.color.r = 1;
+      marker.color.g = 0;
+      marker.color.b = 0;
+      break;  
+    case 1:  // green
+      marker.color.r = 0;
+      marker.color.g = 1;
+      marker.color.b = 0;
+      break;  
+    case 2:  // blue
+      marker.color.r = 0;
+      marker.color.g = 0;
+      marker.color.b = 1;
+      break;
+    default:
+      cout << "ERROR: cannot draw path - unknown color specified" << std::endl;
+  }
+
 
   if (!path.IsValid() || path.waypoints.size() < 2) {
     return marker;
