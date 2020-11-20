@@ -234,42 +234,23 @@ class RRT : public PathFinder {
                   const Eigen::Vector2f& start,
                   const Eigen::Vector2f& goal) override {
     (void) goal;
-    const Eigen::Vector2f bad_goal(20.0, 20.0);
-    if (!IsLineColliding(dynamic_map, start, bad_goal)) {
-      return {{start, bad_goal}, (bad_goal - start).norm()};
-    }
-    if (prev_path_.IsValid() && prev_path_.waypoints.back() == bad_goal &&
-        !IsPathColliding(dynamic_map, prev_path_)) {
-      return SmoothPath(start, dynamic_map, prev_path_);
-    }
+    (void) dynamic_map;
+    const Eigen::Vector2f bad_goal(5.0, 5.0);
 
-    using Env = rrt::Environment<CellsPerMeter, UseEightGrid>;
-
-    const auto start_state = Env::WorldPositionToState(start);
-    const auto goal_state = Env::WorldPositionToState(bad_goal);
-
-    Env env(goal_state,
-            map_,
-            dynamic_map,
-            (robot_radius_ + safety_margin_) * inflation_ + kEpsilon);
-    libMultiRobotPlanning::BoundedAStar<rrt::State, rrt::Action, float, Env>
-        rrt(env, MaxExpansions);
-    libMultiRobotPlanning::PlanResult<rrt::State, rrt::Action, float>
-        solution;
-    if (!rrt.search(start_state, solution)) {
-      return {};
-    }
+    //Path2f test;
+    //test.waypoints.push_back(start);
+    //const Eigen::Vector2f waypoint(15.0, 5.0);
+    //test.waypoints.push_back(waypoint);
+    //test.waypoints.push_back(bad_goal);
 
     Path2f path;
-    path.waypoints.reserve(solution.states.size() + 1);
-    for (const auto& sp : solution.states) {
-      path.waypoints.push_back(Env::StateToWorldPosition(sp.first));
-    }
+    path.waypoints.push_back(start);
+    const Eigen::Vector2f waypoint(15.0, 5.0);
+    path.waypoints.push_back(waypoint);
     path.waypoints.push_back(bad_goal);
-    path.cost =
-        static_cast<float>(solution.cost) / static_cast<float>(CellsPerMeter);
     prev_path_ = path;
-    return SmoothPath(start, dynamic_map, path);
+    return path;
+    //return SmoothPath(start, dynamic_map, path);
   }
 };
 
