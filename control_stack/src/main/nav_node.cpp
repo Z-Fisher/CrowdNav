@@ -42,11 +42,12 @@ int main(int argc, char** argv) {
                   1,
                   &cs::main::StateMachine::UpdateLaser,
                   &state_machine);
-
+  /*
   ros::Subscriber obstacle_sub =
     n.subscribe("/obstacles",
                 1,
                 obstacle_callback);
+  */
 
   // setup command publisher
   ros::Publisher command_pub = n.advertise<geometry_msgs::Twist>(
