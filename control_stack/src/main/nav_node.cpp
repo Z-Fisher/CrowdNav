@@ -48,7 +48,8 @@ int main(int argc, char** argv) {
   ros::Subscriber obstacle_sub =
     n.subscribe("/obstacles",
                 1,
-                obstacle_callback);
+                &cs::main::StateMachine::UpdatePeds,
+                &state_machine);
 
   // setup command publisher
   ros::Publisher command_pub = n.advertise<geometry_msgs::Twist>(
