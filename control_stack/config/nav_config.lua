@@ -22,7 +22,7 @@
 -- ========================================================================
 
 laser = {
-  deadzones = {0, 85, 640, 725};
+  deadzones = {}; -- {0, 85, 640, 725}
   center_offset = {0.2, 0};
 };
 
@@ -54,7 +54,7 @@ pf = {
 
 frames = {
   laser_tf_frame = "/laser";
-  base_tf_frame = "/base_link";
+  base_tf_frame = "/base_footprint"; --"/base_link";
   map_tf_frame = "/map";
 };
 

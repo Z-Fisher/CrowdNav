@@ -37,19 +37,18 @@ int main(int argc, char** argv) {
   cs::main::StateMachine state_machine(&dpw, &n, pub_sub_prefix);
   
   // setup laser sub subscriber
-  /*
   ros::Subscriber laser_sub =
       n.subscribe("/scan",
                   1,
                   &cs::main::StateMachine::UpdateLaser,
                   &state_machine);
-  */
-
+                  
   ros::Subscriber obstacle_sub =
     n.subscribe("/obstacles",
                 1,
                 &cs::main::StateMachine::UpdatePeds,
                 &state_machine);
+
 
   // setup command publisher
   ros::Publisher command_pub = n.advertise<geometry_msgs::Twist>(
