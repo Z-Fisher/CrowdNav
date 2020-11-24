@@ -34,7 +34,7 @@ class NavController : public Controller {
   path_finding::GlobalPathFinder<path_finding::AStar<3, 20000, false>>
       global_path_finder_;
   //path_finding::AStar<5, 500, false> local_path_finder_;
-  path_finding::RRT<5, 500, false> local_path_finder_;
+  path_finding::RRT<20> local_path_finder_;
   util::Pose current_goal_;
   size_t current_goal_index_;
 

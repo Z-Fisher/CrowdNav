@@ -32,6 +32,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <list>
 
 #include "cs/path_finding/path_finder.h"
 #include "cs/util/constants.h"
@@ -44,184 +45,12 @@ namespace cs {
 namespace path_finding {
 
 namespace rrt {
-struct State {
-  State() = delete;
-  explicit State(Eigen::Vector2i pos) : pos(pos) {}
-  State(int x, int y) : pos(x, y) {}
+struct Node {
 
-  State(const State&) = default;
-  State(State&&) = default;
-  State& operator=(const State&) = default;
-  State& operator=(State&&) = default;
-
-  bool operator==(const State& other) const { return pos == other.pos; }
-
-  friend std::ostream& operator<<(std::ostream& os, const State& s) {
-    return os << "(" << s.pos.x() << "," << s.pos.y() << ")";
-  }
-
-  Eigen::Vector2i pos;
-
-  inline int& x() { return pos.x(); }
-  inline int& y() { return pos.y(); }
-  inline const int& x() const { return pos.x(); }
-  inline const int& y() const { return pos.y(); }
 };
+} // namespace rrt
 
-enum class Action {
-  Up,
-  Down,
-  Left,
-  Right,
-  UpLeft,
-  UpRight,
-  DownLeft,
-  DownRight,
-};
-
-inline std::ostream& operator<<(std::ostream& os, const Action& a) {
-  switch (a) {
-    case Action::Up:
-      os << "Up";
-      break;
-    case Action::Down:
-      os << "Down";
-      break;
-    case Action::Left:
-      os << "Left";
-      break;
-    case Action::Right:
-      os << "Right";
-      break;
-    case Action::UpLeft:
-      os << "UpLeft";
-      break;
-    case Action::DownLeft:
-      os << "DownLeft";
-      break;
-    case Action::UpRight:
-      os << "UpRight";
-      break;
-    case Action::DownRight:
-      os << "DownRight";
-      break;
-  }
-  return os;
-}
-
-using Neigh = libMultiRobotPlanning::Neighbor<State, Action, float>;
-
-template <int CellsPerMeter, bool UseEightGrid>
-class Environment {
- public:
-  Environment(State goal,
-              const util::vector_map::VectorMap& map,
-              const util::DynamicFeatures& df,
-              const float min_distance_from_wall)
-      : goal_(std::move(goal)),
-        map_(map),
-        df_(df),
-        min_distance_from_wall_(min_distance_from_wall) {}
-
-  float admissibleHeuristic(const State& s) const {
-    if (UseEightGrid) {
-      static constexpr float kInflation = 1.05f;
-      const Eigen::Vector2i delta = (goal_.pos - s.pos).cwiseAbs();
-      //      return delta.lpNorm<2>();
-
-      if (delta.x() > delta.y()) {
-        return kInflation * (delta.y() * (kSqrtTwo - 1) + delta.x());
-      }
-      return kInflation * (delta.x() * (kSqrtTwo - 1) + delta.y());
-    } else {
-      return Eigen::Vector2i(goal_.pos - s.pos).lpNorm<1>();
-    }
-  }
-
-  bool isSolution(const State& s) const { return s == goal_; }
-  // NOLINTNEXTLINE
-  void getNeighbors(const State& s, std::vector<Neigh>& neighbors) {
-    neighbors.clear();
-
-    State up(s.x(), s.y() + 1);
-    if (TransitionValid(s, up)) {
-      neighbors.emplace_back(Neigh(up, Action::Up, 1));
-    }
-    State down(s.x(), s.y() - 1);
-    if (TransitionValid(s, down)) {
-      neighbors.emplace_back(Neigh(down, Action::Down, 1));
-    }
-    State left(s.x() - 1, s.y());
-    if (TransitionValid(s, left)) {
-      neighbors.emplace_back(Neigh(left, Action::Left, 1));
-    }
-    State right(s.x() + 1, s.y());
-    if (TransitionValid(s, right)) {
-      neighbors.emplace_back(Neigh(right, Action::Right, 1));
-    }
-
-    if (UseEightGrid) {
-      State up_left(s.x() - 1, s.y() + 1);
-      if (TransitionValid(s, up_left)) {
-        neighbors.emplace_back(Neigh(up_left, Action::UpLeft, kSqrtTwo));
-      }
-      State up_right(s.x() + 1, s.y() + 1);
-      if (TransitionValid(s, up_right)) {
-        neighbors.emplace_back(Neigh(up_right, Action::UpRight, kSqrtTwo));
-      }
-      State down_left(s.x() - 1, s.y() - 1);
-      if (TransitionValid(s, down_left)) {
-        neighbors.emplace_back(Neigh(down_left, Action::DownLeft, kSqrtTwo));
-      }
-      State down_right(s.x() + 1, s.y() - 1);
-      if (TransitionValid(s, down_right)) {
-        neighbors.emplace_back(Neigh(down_right, Action::DownRight, kSqrtTwo));
-      }
-    }
-  }
-
-  void onExpandNode(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
-  void onDiscover(const State& /*s*/, int /*fScore*/, int /*gScore*/) {}
-
-  static State WorldPositionToState(const Eigen::Vector2f& world_position) {
-    const int cells_x =
-        std::rintf(static_cast<float>(CellsPerMeter) * world_position.x());
-    const int cells_y =
-        std::rintf(static_cast<float>(CellsPerMeter) * world_position.y());
-    return {cells_x, cells_y};
-  }
-
-  static Eigen::Vector2f StateToWorldPosition(const State& s) {
-    return s.pos.cast<float>() * (1.0f / static_cast<float>(CellsPerMeter));
-  }
-
- private:
-  bool TransitionValid(const State& s1, const State& s2) {
-    const auto p1 = StateToWorldPosition(s1);
-    const auto p2 = StateToWorldPosition(s2);
-    for (const auto& p : df_.features) {
-      if (geometry::Line2f(p, p).CloserThan(p1, p2, min_distance_from_wall_)) {
-        return false;
-      }
-    }
-    for (const auto& w : map_.lines) {
-      if (w.CloserThan(p1, p2, min_distance_from_wall_)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  State goal_;
-  const util::vector_map::VectorMap& map_;
-  const util::DynamicFeatures& df_;
-  float min_distance_from_wall_;
-};
-
-}  // namespace rrt
-
-template <int CellsPerMeter, size_t MaxExpansions, bool UseEightGrid>
+template <int max_samples>
 class RRT : public PathFinder {
  public:
   explicit RRT(const util::vector_map::VectorMap& map,
@@ -257,14 +86,3 @@ class RRT : public PathFinder {
 }  // namespace path_finding
 }  // namespace cs
 
-namespace std {
-template <>
-struct hash<cs::path_finding::rrt::State> {
-  size_t operator()(const cs::path_finding::rrt::State& s) const {
-    size_t seed = 0;
-    boost::hash_combine(seed, s.pos.x());
-    boost::hash_combine(seed, s.pos.y());
-    return seed;
-  }
-};
-}  // namespace std

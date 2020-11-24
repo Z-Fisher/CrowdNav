@@ -341,7 +341,12 @@ class StateMachine {
     dpw_->map_pub_.publish(
         visualization::DrawWalls(map_.lines, "map", "map_ns"));
     DrawRobot(map_, command);
-    return command_scaler_->ScaleCommand(command);
+    
+    // TODO: causes robot to stay still - delete this later
+    (void) command;
+    const util::Twist bad_command(0, 0, 0);
+
+    return command_scaler_->ScaleCommand(bad_command);
   }
 };
 
