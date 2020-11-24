@@ -51,10 +51,13 @@
 #include "cs/util/pose.h"
 #include "cs/util/twist.h"
 #include "cs/util/util.h"
+#include "cs/util/ped_vector.h"
 #include "cs/util/visualization.h"
 #include "shared/math/geometry.h"
 #include "shared/math/math_util.h"
 #include "shared/util/timer.h"
+
+#include <control_stack/Obstacles.h>
 
 namespace cs {
 namespace main {
@@ -143,6 +146,7 @@ struct ControllerList {
 class StateMachine {
  private:
   util::LaserScan laser_;
+  util::PedVector ped_vector_;
   ros::Time laser_update_time_;
   ros::Time ped_update_time_;
   util::Twist odom_;
@@ -318,9 +322,10 @@ class StateMachine {
     state_estimator_->UpdateLaser(laser_, laser_update_time_);
   }
 
-  void UpdatePeds(const sensor_msgs::LaserScan& msg) {
-    ped_update_time_ = msg.header.stamp;
-    ped_detector_->UpdatePeds(laser_, ped_update_time_);
+  void UpdatePeds(const control_stack::Obstacles::ConstPtr& msg) {
+    ped_update_time_ = msg->header.stamp;
+    ped_vector_ = util::PedVector(msg);
+    ped_detector_->UpdatePeds(ped_vector_, ped_update_time_);
   }
 
   void UpdateOdom(const nav_msgs::Odometry& msg) {
