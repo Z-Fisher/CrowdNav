@@ -19,6 +19,11 @@ float prev_y = 1000.0;
 float total_dist = 0.0;
 float goal_x = 0.0;
 float goal_y = 0.0;
+auto start_time = std::chrono::high_resolution_clock::now();;
+auto stop_time = std::chrono::high_resolution_clock::now();;
+bool stopped_flag = true;
+bool moving = true;
+std::chrono::duration<double> time_spent_stopped;
 
 
 // Calculates distance traveled by robot
@@ -29,6 +34,8 @@ void pose_cb(const nav_msgs::Odometry& msg) {
     float y = msg.pose.pose.position.y;
     float dist_x = 0.0;
     float dist_y = 0.0;
+    float dist;
+    float stop_thresh = 0.005;
 
     if (prev_x == 1000.0) {
         prev_x = x;
@@ -43,7 +50,27 @@ void pose_cb(const nav_msgs::Odometry& msg) {
         prev_y = y;
     }
     if (pow(dist_x, 2) > 0.0 || pow(dist_y, 2) > 0.0) {
-        total_dist += sqrt(pow(dist_x,2) + pow(dist_y,2));
+        dist = sqrt(pow(dist_x,2) + pow(dist_y,2));
+        total_dist += dist;
+    } else {
+        dist = 0;
+    }
+
+    if (dist < stop_thresh) {
+        // start the timer or if it has already been started, continue it
+        if (stopped_flag) {
+            start_time = std::chrono::high_resolution_clock::now();
+            stopped_flag = false;
+            moving = true;
+        }
+    // if it was previously just stopped, calc end_time and add the time
+    } else {
+        if (moving) {
+            stop_time = std::chrono::high_resolution_clock::now();
+            time_spent_stopped += stop_time - start_time;
+            stopped_flag = true;
+            moving = false;
+        }
     }
 }	
 
@@ -64,8 +91,6 @@ void goal_cb(const visualization_msgs::MarkerArray& msg) {
 }	
 
 
-//TODO ped callback func to monitor proximity / collisions
-
 
 int main(int argc, char **argv) {	
 
@@ -85,19 +110,16 @@ int main(int argc, char **argv) {
                                             1, 	
                                             goal_cb);
 
-    // TODO: ped sub
-
-
-
     ros::Rate rate(30.0);
     while (ros::ok()) {
         ros::spinOnce();
 
-        if (dist_to_goal <= 15) {
+        if (dist_to_goal <= 10) {
             auto finish = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed = finish - start;
             ROS_INFO("DONE - Sufficiently close to goal");
             ROS_INFO("Time taken: %f", elapsed.count());
+            ROS_INFO("Time spent stopped: %f", time_spent_stopped.count());
             ROS_INFO("Total distance of path traveled: %f", total_dist);
             ros::shutdown();
         }
