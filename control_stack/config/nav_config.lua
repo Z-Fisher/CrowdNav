@@ -21,6 +21,7 @@
 -- SOFTWARE.
 -- ========================================================================
 
+
 laser = {
   deadzones = {}; -- {0, 85, 640, 725}
   center_offset = {0.2, 0};
@@ -40,12 +41,11 @@ pf = {
   kRotateStdDev = 0.06;
   kTemporalConsistencyWeight = 0;
 
-  -- kMap = "../rosbuild_ws/simulator/f1tenth_simulator/maps/GDC3.txt";
-  map = "src/CrowdNav/control_stack/maps/empty.map"; -- irrelevant
-
-  -- temporarily hardcoding start position and global goal
-  goal_poses = {{24,24,0.2}}; --get_goals();
-  start_pose = {10,10,0}; --get_goals()[3];
+  -- *********************************************
+  map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  goal_poses = {{24,24,0}};
+  start_pose = {10,10,0};
+  -- *********************************************
 
   kRobotRadius = 0.1;
   kSafetyMargin = 0.16;

@@ -23,15 +23,17 @@ void obstacle_callback(const control_stack::Obstacles::ConstPtr& msg) {
 
 
 int main(int argc, char** argv) {
-  // config file
-  std::string config_file = "src/CrowdNav/control_stack/config/nav_config.lua";
-  config_reader::ConfigReader reader({config_file});
 
   // initialize ros and node
   const std::string pub_sub_prefix = "/robot";
   ros::init(argc, argv, "nav_node");
   ros::NodeHandle n;
-  
+
+  // config file
+  std::string config_file = "src/CrowdNav/control_stack/config/nav_config.lua";
+  n.getParam("/nav_node/config_file_path", config_file);      
+  config_reader::ConfigReader reader({config_file});
+
   // setup state machine
   cs::main::DebugPubWrapper dpw(&n, pub_sub_prefix);
   cs::main::StateMachine state_machine(&dpw, &n, pub_sub_prefix);

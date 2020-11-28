@@ -24,6 +24,7 @@ auto stop_time = std::chrono::high_resolution_clock::now();;
 bool stopped_flag = true;
 bool moving = true;
 std::chrono::duration<double> time_spent_stopped;
+float goal_threshold = 2.0;
 
 
 // Calculates distance traveled by robot
@@ -110,11 +111,13 @@ int main(int argc, char **argv) {
                                             1, 	
                                             goal_cb);
 
+    n.getParam("/analytics_node/goal_threshold", goal_threshold);      
+
     ros::Rate rate(30.0);
     while (ros::ok()) {
         ros::spinOnce();
 
-        if (dist_to_goal <= 10) {
+        if (dist_to_goal <= goal_threshold) {
             auto finish = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed = finish - start;
             ROS_INFO("DONE - Sufficiently close to goal");
