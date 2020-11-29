@@ -61,6 +61,7 @@ class EscapeCollisionController : public Controller {
       const util::vector_map::VectorMap& map,
       const state_estimation::StateEstimator& state_estimator,
       const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+      const ped_detection::PedDetector& ped_detector,
       const motion_planning::PIDController& motion_planner);
   ~EscapeCollisionController() = default;
 

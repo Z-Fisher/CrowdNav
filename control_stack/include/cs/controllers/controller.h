@@ -57,6 +57,7 @@ class Controller {
   const util::vector_map::VectorMap& map_;
   const state_estimation::StateEstimator& state_estimator_;
   const obstacle_avoidance::ObstacleDetector& obstacle_detector_;
+  const ped_detection::PedDetector& ped_detector_;
   const motion_planning::PIDController& motion_planner_;
 
  public:
@@ -66,13 +67,16 @@ class Controller {
              const util::vector_map::VectorMap& map,
              const state_estimation::StateEstimator& state_estimator,
              const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+             const ped_detection::PedDetector& ped_detector,
              const motion_planning::PIDController& motion_planner)
       : dpw_(dpw),
         laser_(laser),
         map_(map),
         state_estimator_(state_estimator),
         obstacle_detector_(obstacle_detector),
+        ped_detector_(ped_detector),
         motion_planner_(motion_planner) {}
+
   virtual ~Controller() = default;
 
   virtual std::pair<ControllerType, util::Twist> Execute() = 0;
