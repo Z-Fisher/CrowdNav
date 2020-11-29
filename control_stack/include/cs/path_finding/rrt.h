@@ -44,22 +44,24 @@
 namespace cs {
 namespace path_finding {
 
-namespace rrt {
-struct Node {
+namespace params {
+CONFIG_INT(num_samples, "rrt.num_samples");
+CONFIG_FLOAT(cost_bias, "rrt.cost_bias");
+CONFIG_FLOAT(path_length, "rrt.path_length");
+}  // namespace params
 
+namespace rrt {
+struct Edge {
+  Path2f path;
+  float cost;
+  Edge(const Path2f p, const float j) : path(p), cost(j) {}
 };
 } // namespace rrt
 
 template <int max_samples>
 class RRT : public PathFinder {
-  // Vector of directions
-  // Each direction has a collide probability and a cost from the goal
-  // 
-
-  // Fuck astar
-  // Change path finder interface in header file to take in dpw in constructor
-  // change interface to take in ped detector for find path
-  // 
+ private:
+  std::vector<rrt::Edge> edges_;
  public:
   explicit RRT(const util::vector_map::VectorMap& map,
                  const float& robot_radius,
@@ -69,24 +71,30 @@ class RRT : public PathFinder {
 
   Path2f FindPath(const ped_detection::PedDetector& ped_detector,
                   const Eigen::Vector2f& start,
-                  const Eigen::Vector2f& goal) {
+                  const Eigen::Vector2f& goal) {    
     (void) goal;
     (void) ped_detector;
-    const Eigen::Vector2f bad_goal(5.0, 5.0);
+    
+    for (int i = 0; i < params::CONFIG_num_samples; i++) {
+      float theta = 2 * i * M_PI / params::CONFIG_num_samples;
+      const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
+                                   params::CONFIG_path_length * cos(theta));
+      Path2f path;
+      path.waypoints.push_back(start);
+      path.waypoints.push_back(start + sample);
+      rrt::Edge candidate(path, 0);
+      edges_.push_back(candidate);
+      //ROS_INFO("Path %d: x: %f, y: %f", i, edges_.back().path.waypoints.back()[0], edges_.back().path.waypoints.back()[1]);
+    }
+    rrt::Edge min_cost_edge = *std::min_element(begin(edges_), end(edges_),
+                                    [](const rrt::Edge& a, const rrt::Edge& b){
+        return a.cost < b.cost;
+    });
 
-    //Path2f test;
-    //test.waypoints.push_back(start);
-    //const Eigen::Vector2f waypoint(15.0, 5.0);
-    //test.waypoints.push_back(waypoint);
-    //test.waypoints.push_back(bad_goal);
-
-    Path2f path;
-    path.waypoints.push_back(start);
-    const Eigen::Vector2f waypoint(15.0, 5.0);
-    path.waypoints.push_back(waypoint);
-    path.waypoints.push_back(bad_goal);
-    prev_path_ = path;
-    return path;
+    prev_path_ = min_cost_edge.path;
+    ROS_INFO("Path: x: %f, y: %f", min_cost_edge.path.waypoints[0][0], min_cost_edge.path.waypoints[0][1]);
+    ROS_INFO("Path: x: %f, y: %f", min_cost_edge.path.waypoints.back()[0], min_cost_edge.path.waypoints.back()[1]);
+    return min_cost_edge.path;
     //return SmoothPath(start, dynamic_map, path);
   }
 
@@ -99,4 +107,3 @@ class RRT : public PathFinder {
 
 }  // namespace path_finding
 }  // namespace cs
-

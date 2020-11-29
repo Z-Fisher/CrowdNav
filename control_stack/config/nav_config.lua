@@ -116,3 +116,9 @@ cmd_scaler = {
 esc_collision = {
   num_safety_margins = 2;
 };
+
+rrt = {
+  num_samples = 4;
+  cost_bias = 1.0;
+  path_length = 10.0;
+}
