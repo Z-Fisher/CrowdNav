@@ -43,8 +43,9 @@ struct Path {
   std::vector<Position> waypoints;
   Cost cost;
   double dist_from_goal;
+  float collision_prob;
 
-  Path() : waypoints(), cost(0), dist_from_goal(INFINITY) {}
+  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0) {}
   Path(const std::vector<Position>& waypoints, const Cost& cost, const double dist_from_goal)
       : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal) {}
 
