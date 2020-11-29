@@ -51,17 +51,13 @@ CONFIG_FLOAT(path_length, "rrt.path_length");
 }  // namespace params
 
 namespace rrt {
-struct Edge {
-  Path2f path;
-  float cost;
-  Edge(const Path2f p, const float j) : path(p), cost(j) {}
-};
+
 } // namespace rrt
 
 template <int max_samples>
 class RRT : public PathFinder {
  private:
-  std::vector<rrt::Edge> edges_;
+  std::vector<Path2f> paths_;
  public:
   explicit RRT(const util::vector_map::VectorMap& map,
                  const float& robot_radius,
@@ -79,25 +75,24 @@ class RRT : public PathFinder {
       float theta = 2 * i * M_PI / params::CONFIG_num_samples;
       const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
                                    params::CONFIG_path_length * cos(theta));
-      Path2f path;
+      Path2f path = Path2f();
       ROS_INFO("Start - x: %f, y: %f", start[0], start[1]);
       path.waypoints.push_back(start);
       ROS_INFO("Start - x: %f, y: %f", start[0] + sample[0], start[1] + sample[1]);
       path.waypoints.push_back(start + sample);
-      rrt::Edge candidate(path, i);
-      edges_.push_back(candidate);
+      path.cost = i;
+      paths_.push_back(path);
       //ROS_INFO("Path %d: x: %f, y: %f", i, edges_.back().path.waypoints.back()[0], edges_.back().path.waypoints.back()[1]);
     }
-    rrt::Edge min_cost_edge = *std::min_element(begin(edges_), end(edges_),
-                                    [](const rrt::Edge& a, const rrt::Edge& b){
+    Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
+                                    [](const Path2f& a, const Path2f& b){
         return a.cost < b.cost;
     });
 
-    prev_path_ = min_cost_edge.path;
-    //ROS_INFO(prev_path_.waypoints.size());
-    ROS_INFO("Path: x: %f, y: %f", prev_path_.waypoints[0][0], prev_path_.waypoints[0][1]);
-    ROS_INFO("Path: x: %f, y: %f", prev_path_.waypoints[1][0], prev_path_.waypoints[1][1]);
-    return prev_path_;
+    prev_path_ = min_cost_path;
+    ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
+    ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
+    return min_cost_path;
     //return SmoothPath(start, dynamic_map, path);
   }
 
