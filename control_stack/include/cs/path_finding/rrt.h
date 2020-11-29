@@ -75,17 +75,20 @@ class RRT : public PathFinder {
       float theta = 2 * i * M_PI / params::CONFIG_num_samples;
       const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
                                    params::CONFIG_path_length * cos(theta));
-      Path2f path = Path2f();
+      Path2f path;
       path.waypoints.push_back(start);
-      path.waypoints.push_back(start + sample);
+      // path.waypoints.push_back(start + sample);
       path.cost = i;
       paths_.push_back(path);
-      //ROS_INFO("Path %d: x: %f, y: %f", i, edges_.back().path.waypoints.back()[0], edges_.back().path.waypoints.back()[1]);
+    
     }
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
                                     [](const Path2f& a, const Path2f& b){
         return a.cost < b.cost;
     });
+    ROS_INFO("start: %f, %f", start[0], start[1]);
+
+    min_cost_path = paths_[0];
 
     prev_path_ = min_cost_path;
     ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
