@@ -52,6 +52,14 @@ struct Node {
 
 template <int max_samples>
 class RRT : public PathFinder {
+  // Vector of directions
+  // Each direction has a collide probability and a cost from the goal
+  // 
+
+  // Fuck astar
+  // Change path finder interface in header file to take in dpw in constructor
+  // change interface to take in ped detector for find path
+  // 
  public:
   explicit RRT(const util::vector_map::VectorMap& map,
                  const float& robot_radius,

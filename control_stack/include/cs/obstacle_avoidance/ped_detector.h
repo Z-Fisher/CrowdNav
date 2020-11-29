@@ -41,6 +41,7 @@ class PedDetector {
     // NP_CHECK(ped_vect.ros_msg.header.stamp == time);
     ped_times_.push_back(time);
     obstacles_ = ped_vect;
+    // ROS_INFO("WE HAVE UPDATED THE PEDS");
 
   }
 
