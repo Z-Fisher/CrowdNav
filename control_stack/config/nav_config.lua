@@ -121,4 +121,5 @@ rrt = {
   num_samples = 4;
   cost_bias = 1.0;
   path_length = 10.0;
+  num_paths_visualized = 4;
 }
