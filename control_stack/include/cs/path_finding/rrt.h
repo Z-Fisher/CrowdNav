@@ -50,10 +50,6 @@ CONFIG_FLOAT(cost_bias, "rrt.cost_bias");
 CONFIG_FLOAT(path_length, "rrt.path_length");
 }  // namespace params
 
-namespace rrt {
-
-} // namespace rrt
-
 template <int max_samples>
 class RRT : public PathFinder {
  private:
@@ -97,9 +93,7 @@ class RRT : public PathFinder {
   }
 
   std::vector<Path2f> GetCandidatePaths(int num_paths) override {
-    (void) num_paths;
-    std::vector<Path2f> candidates;
-    return candidates;
+    return std::vector<Path2f>(paths_.begin(), paths_.begin() + num_paths);
   }
 };
 

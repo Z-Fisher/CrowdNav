@@ -37,7 +37,7 @@ CONFIG_FLOAT(robot_radius, "pf.kRobotRadius");
 CONFIG_FLOAT(safety_margin, "pf.kSafetyMargin");
 CONFIG_FLOAT(local_inflation, "path_finding.local_robot_inflation");
 CONFIG_FLOAT(global_inflation, "path_finding.global_robot_inflation");
-
+CONFIG_INT(num_drawn, "rrt.num_paths_visualized");
 CONFIG_STRING(map_tf_frame, "frames.map_tf_frame");
 CONFIG_STRING(base_link_tf_frame, "frames.base_tf_frame");
 CONFIG_STRING(laser_tf_frame, "frames.laser_tf_frame");
@@ -172,8 +172,7 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
   DrawPath(dpw_, local_path, "local_path", 1);
-  const auto candidates = local_path_finder_.GetCandidatePaths(3);
-  for (auto i : candidates) {
+  for (auto i : local_path_finder_.GetCandidatePaths(params::CONFIG_num_drawn)){
     DrawPath(dpw_, i, "candidate_local_paths", 2);
   }
   if (local_path.waypoints.empty()) {
