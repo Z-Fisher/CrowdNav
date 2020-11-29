@@ -109,6 +109,8 @@ class PathFinder {
   virtual Path2f FindPath(const util::DynamicFeatures& dynamic_map,
                           const Eigen::Vector2f& start,
                           const Eigen::Vector2f& goal) = 0;
+
+  virtual std::vector<Path2f> GetCandidatePaths(int num_paths) = 0;
 };
 
 }  // namespace path_finding

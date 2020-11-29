@@ -269,6 +269,13 @@ class AStar : public PathFinder {
     prev_path_ = path;
     return SmoothPath(start, dynamic_map, path);
   }
+
+  std::vector<Path2f> GetCandidatePaths(int num_paths) override {
+    (void) num_paths;
+    std::vector<Path2f> candidates;
+    return candidates;
+  }
+
 };
 
 }  // namespace path_finding
