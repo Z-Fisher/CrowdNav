@@ -42,12 +42,13 @@ template <typename Position, typename Cost>
 struct Path {
   std::vector<Position> waypoints;
   Cost cost;
+  double dist_from_goal;
 
-  Path() : waypoints(), cost(0) {}
-  Path(const std::vector<Position>& waypoints, const Cost& cost)
-      : waypoints(waypoints), cost(cost) {}
+  Path() : waypoints(), cost(0), dist_from_goal(INFINITY) {}
+  Path(const std::vector<Position>& waypoints, const Cost& cost, const double dist_from_goal)
+      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal) {}
 
-  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost) {}
+  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal) {}
   Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)) {}
   Path& operator=(const Path& p) {
     this->waypoints = p.waypoints;

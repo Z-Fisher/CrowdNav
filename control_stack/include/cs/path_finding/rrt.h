@@ -58,6 +58,11 @@ template <int max_samples>
 class RRT : public PathFinder {
  private:
   std::vector<Path2f> paths_;
+
+  double euclid_dist_(const Path2f& path, const Eigen::Vector2f& goal) {
+    return sqrt(pow(path.waypoints.back()[0] - goal[0], 2) + pow(path.waypoints.back()[1] - goal[1], 2));
+
+  }
  public:
   explicit RRT(const util::vector_map::VectorMap& map,
                  const float& robot_radius,
@@ -78,9 +83,12 @@ class RRT : public PathFinder {
       Path2f path;
       path.waypoints.push_back(start);
       path.waypoints.push_back(start + sample);
-      // ROS_INFO("Path waypoint size: %i, x: %f, y: %f", (int) path.waypoints.size(), path.waypoints[0][0], path.waypoints[0][1]);
+     
       path.cost = i;
+      path.dist_from_goal = euclid_dist_(path, goal);
       paths_.push_back(path);
+      ROS_INFO("Goal: x: %f, y: %f ", goal[0], goal[1]);
+      ROS_INFO("Path: x: %f, y: %f, dist: %f, cost: %f", path.waypoints[1][0], path.waypoints[1][1], path.dist_from_goal, path.cost);
     
     }
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
@@ -89,7 +97,6 @@ class RRT : public PathFinder {
     });
     // ROS_INFO("start: %f, %f", start[0], start[1]);
     // ROS_INFO("Path waypoint size: %i", (int) paths_.size());
-    min_cost_path = paths_[0];
 
     prev_path_ = min_cost_path;
     // ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
