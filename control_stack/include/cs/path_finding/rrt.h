@@ -76,7 +76,9 @@ class RRT : public PathFinder {
       const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
                                    params::CONFIG_path_length * cos(theta));
       Path2f path = Path2f();
+      ROS_INFO("Start - x: %f, y: %f", start[0], start[1]);
       path.waypoints.push_back(start);
+      ROS_INFO("Start - x: %f, y: %f", start[0] + sample[0], start[1] + sample[1]);
       path.waypoints.push_back(start + sample);
       path.cost = i;
       paths_.push_back(path);
