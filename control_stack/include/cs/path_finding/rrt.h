@@ -63,22 +63,22 @@ class RRT : public PathFinder {
                  const float& robot_radius,
                  const float& safety_margin,
                  const float& inflation)
-      : PathFinder(map, robot_radius, safety_margin, inflation) {}
+      : PathFinder(map, robot_radius, safety_margin, inflation), paths_() {}
 
   Path2f FindPath(const ped_detection::PedDetector& ped_detector,
                   const Eigen::Vector2f& start,
                   const Eigen::Vector2f& goal) {    
     (void) goal;
     (void) ped_detector;
-    
+    paths_.clear();
     for (int i = 0; i < params::CONFIG_num_samples; i++) {
       float theta = 2 * i * M_PI / params::CONFIG_num_samples;
       const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
                                    params::CONFIG_path_length * cos(theta));
       Path2f path;
       path.waypoints.push_back(start);
-      // path.waypoints.push_back(start + sample);
-   
+      path.waypoints.push_back(start + sample);
+      // ROS_INFO("Path waypoint size: %i, x: %f, y: %f", (int) path.waypoints.size(), path.waypoints[0][0], path.waypoints[0][1]);
       path.cost = i;
       paths_.push_back(path);
     
@@ -87,13 +87,13 @@ class RRT : public PathFinder {
                                     [](const Path2f& a, const Path2f& b){
         return a.cost < b.cost;
     });
-    ROS_INFO("start: %f, %f", start[0], start[1]);
-
+    // ROS_INFO("start: %f, %f", start[0], start[1]);
+    // ROS_INFO("Path waypoint size: %i", (int) paths_.size());
     min_cost_path = paths_[0];
 
     prev_path_ = min_cost_path;
-    ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
-    ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
+    // ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
+    // ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
     return min_cost_path;
     //return SmoothPath(start, dynamic_map, path);
   }
