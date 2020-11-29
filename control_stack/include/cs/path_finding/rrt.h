@@ -80,9 +80,11 @@ class RRT : public PathFinder {
       const Eigen::Vector2f sample(params::CONFIG_path_length * sin(theta), 
                                    params::CONFIG_path_length * cos(theta));
       Path2f path;
+      ROS_INFO("Start - x: %f, y: %f", start[0], start[1]);
       path.waypoints.push_back(start);
+      ROS_INFO("Start - x: %f, y: %f", start[0] + sample[0], start[1] + sample[1]);
       path.waypoints.push_back(start + sample);
-      rrt::Edge candidate(path, 0);
+      rrt::Edge candidate(path, i);
       edges_.push_back(candidate);
       //ROS_INFO("Path %d: x: %f, y: %f", i, edges_.back().path.waypoints.back()[0], edges_.back().path.waypoints.back()[1]);
     }
@@ -92,9 +94,10 @@ class RRT : public PathFinder {
     });
 
     prev_path_ = min_cost_edge.path;
-    ROS_INFO("Path: x: %f, y: %f", min_cost_edge.path.waypoints[0][0], min_cost_edge.path.waypoints[0][1]);
-    ROS_INFO("Path: x: %f, y: %f", min_cost_edge.path.waypoints.back()[0], min_cost_edge.path.waypoints.back()[1]);
-    return min_cost_edge.path;
+    //ROS_INFO(prev_path_.waypoints.size());
+    ROS_INFO("Path: x: %f, y: %f", prev_path_.waypoints[0][0], prev_path_.waypoints[0][1]);
+    ROS_INFO("Path: x: %f, y: %f", prev_path_.waypoints[1][0], prev_path_.waypoints[1][1]);
+    return prev_path_;
     //return SmoothPath(start, dynamic_map, path);
   }
 
