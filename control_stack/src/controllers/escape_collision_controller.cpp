@@ -49,9 +49,10 @@ EscapeCollisionController::EscapeCollisionController(
     const util::vector_map::VectorMap& map,
     const state_estimation::StateEstimator& state_estimator,
     const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+    const ped_detection::PedDetector& ped_detector,
     const motion_planning::PIDController& motion_planner)
     : Controller(
-          dpw, laser, map, state_estimator, obstacle_detector, motion_planner),
+          dpw, laser, map, state_estimator, obstacle_detector, ped_detector, motion_planner),
       escape_waypoint_() {}
 
 void DrawWaypoint(cs::main::DebugPubWrapper* dpw, const util::Pose& goal) {

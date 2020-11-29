@@ -91,6 +91,7 @@ struct ControllerList {
                  const util::vector_map::VectorMap& map,
                  const state_estimation::StateEstimator& state_estimator,
                  const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+                 const ped_detection::PedDetector& ped_detector,
                  const motion_planning::PIDController& motion_planner,
                  cs::controllers::ControllerType current_controller)
       : current_controller_(current_controller) {
@@ -100,6 +101,7 @@ struct ControllerList {
                                                          map,
                                                          state_estimator,
                                                          obstacle_detector,
+                                                         ped_detector,
                                                          motion_planner));
     controller_array[cs::controllers::ControllerType::ESCAPE_COLLISION] =
         ControllerPtr(
@@ -108,6 +110,7 @@ struct ControllerList {
                                                            map,
                                                            state_estimator,
                                                            obstacle_detector,
+                                                           ped_detector,
                                                            motion_planner));
 
     for (const auto& p : controller_array) {
@@ -295,9 +298,11 @@ class StateMachine {
                          map_,
                          *state_estimator_,
                          obstacle_detector_,
+                         *ped_detector_,
                          motion_planner_,
                          cs::controllers::ControllerType::NAVIGATION),
         pub_sub_prefix_(pub_sub_prefix) {}
+
 
   Eigen::Affine2f GetLaserOffset() {
     Eigen::Affine2f a = Eigen::Affine2f::Identity();

@@ -232,7 +232,7 @@ class AStar : public PathFinder {
 
   Path2f FindPath(const util::DynamicFeatures& dynamic_map,
                   const Eigen::Vector2f& start,
-                  const Eigen::Vector2f& goal) override {
+                  const Eigen::Vector2f& goal) {
     if (!IsLineColliding(dynamic_map, start, goal)) {
       return {{start, goal}, (goal - start).norm()};
     }

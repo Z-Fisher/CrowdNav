@@ -52,9 +52,10 @@ NavController::NavController(
     const util::vector_map::VectorMap& map,
     const state_estimation::StateEstimator& state_estimator,
     const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+    const ped_detection::PedDetector& ped_detector,
     const motion_planning::PIDController& motion_planner)
     : Controller(
-          dpw, laser, map, state_estimator, obstacle_detector, motion_planner),
+          dpw, laser, map, state_estimator, obstacle_detector, ped_detector, motion_planner),
       global_path_finder_(map_,
                           params::CONFIG_robot_radius,
                           params::CONFIG_safety_margin,
@@ -167,7 +168,7 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
   const auto local_path = local_path_finder_.FindPath(
-      obstacle_detector_.GetDynamicFeatures(), est_pose.tra, global_waypoint);
+      ped_detector_, est_pose.tra, global_waypoint);
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
   DrawPath(dpw_, local_path, "local_path", 1);

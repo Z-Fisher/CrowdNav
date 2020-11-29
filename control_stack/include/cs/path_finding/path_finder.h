@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "cs/obstacle_avoidance/obstacle_detector.h"
+#include "cs/obstacle_avoidance/ped_detector.h"
 #include "cs/util/map.h"
 #include "cs/util/pose.h"
 
@@ -105,12 +106,16 @@ class PathFinder {
         robot_radius_(robot_radius),
         safety_margin_(safety_margin),
         inflation_(inflation) {}
+        
+  // virtual Path2f FindPath(const util::DynamicFeatures& dynamic_map,
+  //                         const Eigen::Vector2f& start,
+  //                         const Eigen::Vector2f& goal) = 0;
 
-  virtual Path2f FindPath(const util::DynamicFeatures& dynamic_map,
-                          const Eigen::Vector2f& start,
-                          const Eigen::Vector2f& goal) = 0;
 
-  virtual std::vector<Path2f> GetCandidatePaths(int num_paths) = 0;
+  // virtual Path2f FindPath(const ped_detection::PedDetector& ped_detector,
+  //                         const Eigen::Vector2f& start,
+  //                         const Eigen::Vector2f& goal) = 0;
+
 };
 
 }  // namespace path_finding

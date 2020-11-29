@@ -67,11 +67,11 @@ class RRT : public PathFinder {
                  const float& inflation)
       : PathFinder(map, robot_radius, safety_margin, inflation) {}
 
-  Path2f FindPath(const util::DynamicFeatures& dynamic_map,
+  Path2f FindPath(const ped_detection::PedDetector& ped_detector,
                   const Eigen::Vector2f& start,
-                  const Eigen::Vector2f& goal) override {
+                  const Eigen::Vector2f& goal) {
     (void) goal;
-    (void) dynamic_map;
+    (void) ped_detector;
     const Eigen::Vector2f bad_goal(5.0, 5.0);
 
     //Path2f test;
