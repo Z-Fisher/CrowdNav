@@ -78,6 +78,7 @@ class RRT : public PathFinder {
       Path2f path;
       path.waypoints.push_back(start);
       // path.waypoints.push_back(start + sample);
+   
       path.cost = i;
       paths_.push_back(path);
     

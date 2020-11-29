@@ -172,6 +172,10 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
   DrawPath(dpw_, local_path, "local_path", 1);
+  const auto candidates = local_path_finder_.GetCandidatePaths(3);
+  for (auto i : candidates) {
+    DrawPath(dpw_, i, "candidate_local_paths", 2);
+  }
   if (local_path.waypoints.empty()) {
     ROS_INFO("Local path planner failed.");
   }
