@@ -114,6 +114,7 @@ class RRT : public PathFinder {
     //     ped.twist.tra.x(), 
     //     ped.twist.tra.y(),
     //     ped.radius);
+
       float cdf_hi_x = 0.5 * std::erfc(-(x_hi- mean_x)/(sigma*sqrt(2)));
       float cdf_lo_x = 0.5 * std::erfc(-(x_lo- mean_x)/(sigma*sqrt(2)));
       float p_x = cdf_hi_x - cdf_lo_x;
@@ -182,7 +183,7 @@ class RRT : public PathFinder {
 
 
     // Find the minimum cost path
-    Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
+    Path2f min_cost_path = *std::min_element(paths_.begin(), paths_.end(),
                                 [](const Path2f& a, const Path2f& b){
       return a.cost < b.cost;
     });
@@ -197,11 +198,9 @@ class RRT : public PathFinder {
   }
 
   std::vector<Path2f> GetCandidatePaths(int num_paths) override {
-    /* THIS DOES NOT WORK YET
-    auto sorted_paths = *std::sort(begin(paths_), end(paths_), 
-                                   [](const Path2f& a, const Path2f& b){
+    std::sort(paths_.begin(), paths_.end(),[](const Path2f& a, const Path2f& b){
       return a.cost < b.cost;
-    }*/
+    });
     return std::vector<Path2f>(paths_.begin() + 1, paths_.begin() + num_paths);
   }
 };
