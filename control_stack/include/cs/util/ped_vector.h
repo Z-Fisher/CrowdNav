@@ -1,5 +1,5 @@
 #pragma once
-// Copyright 2020 kvedder@seas.upenn.edu
+// Copyright 2019 - 2020 kvedder@seas.upenn.edu
 // School of Engineering and Applied Sciences,
 // University of Pennsylvania
 //
@@ -23,38 +23,53 @@
 // SOFTWARE.
 // ========================================================================
 
-#include <utility>
+#include <sensor_msgs/LaserScan.h>
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Geometry>
+#include <limits>
+#include <vector>
 
-#include "cs/controllers/controller.h"
+#include "cs/util/constants.h"
+#include "shared/math/math_util.h"
 
-namespace cs {
-namespace controllers {
+#include <control_stack/Obstacles.h>
 
-class NavController : public Controller {
-  path_finding::GlobalPathFinder<path_finding::AStar<3, 20000, false>>
-      global_path_finder_;
-  //path_finding::AStar<5, 500, false> local_path_finder_;
-  path_finding::RRT<20> local_path_finder_;
-  util::Pose current_goal_;
-  size_t current_goal_index_;
+#include "pose.h"
+#include "twist.h"
 
-  void RefreshGoal();
+#include "geometry_msgs/Point.h"
+#include "geometry_msgs/Vector3.h"
 
+#include <ros/ros.h>
+
+namespace util {
+    struct Pedestrian {
+        Pose pose;
+        Twist vel;
+        float radius;
+        float true_radius;
+        Pedestrian(const geometry_msgs::Point& point, const geometry_msgs::Vector3& vel,
+            const float rad, const float true_rad) : pose(point.x, point.y, 0), vel(vel.x, vel.y, 0) {
+                radius = rad;
+                true_radius = true_rad;
+            }
+    };
+
+
+class PedVector {
  public:
-  NavController() = delete;
-  NavController(cs::main::DebugPubWrapper* dpw,
-                const util::LaserScan& laser,
-                const util::vector_map::VectorMap& map,
-                const state_estimation::StateEstimator& state_estimator,
-                const obstacle_avoidance::ObstacleDetector& obstacle_detector,
-                const ped_detection::PedDetector& ped_detector,
-                const motion_planning::PIDController& motion_planner);
-  ~NavController() = default;
+    std::vector<Pedestrian> peds;
+    // control_stack::Obstacles ros_msg;
 
-  std::pair<ControllerType, util::Twist> Execute() override;
+    PedVector(const control_stack::Obstacles::ConstPtr& msg) {
+        for (auto circle: msg->circles) {
+            peds.push_back(Pedestrian(circle.center, circle.velocity, circle.radius, circle.true_radius));
+        }
 
-  void Reset() override;
+        //  ROS_INFO("x_pos: [%f]", peds[0].pose.tra[0]);
+    }
+
+    PedVector() {}
+  
 };
-
-}  // namespace controllers
-}  // namespace cs
+}  // namespace util

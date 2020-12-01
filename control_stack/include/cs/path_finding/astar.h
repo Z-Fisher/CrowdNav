@@ -232,9 +232,9 @@ class AStar : public PathFinder {
 
   Path2f FindPath(const util::DynamicFeatures& dynamic_map,
                   const Eigen::Vector2f& start,
-                  const Eigen::Vector2f& goal) override {
+                  const Eigen::Vector2f& goal) {
     if (!IsLineColliding(dynamic_map, start, goal)) {
-      return {{start, goal}, (goal - start).norm()};
+      return {{start, goal}, (goal - start).norm(), (goal - start).norm()};
     }
     if (prev_path_.IsValid() && prev_path_.waypoints.back() == goal &&
         !IsPathColliding(dynamic_map, prev_path_)) {
@@ -269,6 +269,13 @@ class AStar : public PathFinder {
     prev_path_ = path;
     return SmoothPath(start, dynamic_map, path);
   }
+
+  std::vector<Path2f> GetCandidatePaths(int num_paths) override {
+    (void) num_paths;
+    std::vector<Path2f> candidates;
+    return candidates;
+  }
+
 };
 
 }  // namespace path_finding

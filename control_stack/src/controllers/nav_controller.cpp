@@ -37,7 +37,7 @@ CONFIG_FLOAT(robot_radius, "pf.kRobotRadius");
 CONFIG_FLOAT(safety_margin, "pf.kSafetyMargin");
 CONFIG_FLOAT(local_inflation, "path_finding.local_robot_inflation");
 CONFIG_FLOAT(global_inflation, "path_finding.global_robot_inflation");
-
+CONFIG_INT(num_drawn_candidates, "rrt.num_paths_visualized");
 CONFIG_STRING(map_tf_frame, "frames.map_tf_frame");
 CONFIG_STRING(base_link_tf_frame, "frames.base_tf_frame");
 CONFIG_STRING(laser_tf_frame, "frames.laser_tf_frame");
@@ -52,9 +52,10 @@ NavController::NavController(
     const util::vector_map::VectorMap& map,
     const state_estimation::StateEstimator& state_estimator,
     const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+    const ped_detection::PedDetector& ped_detector,
     const motion_planning::PIDController& motion_planner)
     : Controller(
-          dpw, laser, map, state_estimator, obstacle_detector, motion_planner),
+          dpw, laser, map, state_estimator, obstacle_detector, ped_detector, motion_planner),
       global_path_finder_(map_,
                           params::CONFIG_robot_radius,
                           params::CONFIG_safety_margin,
@@ -68,9 +69,10 @@ NavController::NavController(
 
 void DrawPath(cs::main::DebugPubWrapper* dpw,
               const path_finding::Path2f& p,
-              const std::string& ns) {
+              const std::string& ns,
+              const int& color) {
   dpw->robot_path_pub_.publish(
-      visualization::DrawPath(p, params::CONFIG_map_tf_frame, ns));
+      visualization::DrawPath(p, params::CONFIG_map_tf_frame, ns, color));
 }
 
 void DrawGoal(cs::main::DebugPubWrapper* dpw, const util::Pose& goal) {
@@ -143,6 +145,7 @@ void NavController::RefreshGoal() {
 
 std::pair<ControllerType, util::Twist> NavController::Execute() {
   const auto est_pose = state_estimator_.GetEstimatedPose();
+  const auto est_vel = state_estimator_.GetEstimatedVelocity();
   ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
 
   const auto laser_points_wf = laser_.TransformPointsFrameSparse(
@@ -162,14 +165,19 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
 
   global_path_finder_.PlanPath(est_pose.tra, current_goal_.tra);
   const auto global_path = global_path_finder_.GetPath();
-  DrawPath(dpw_, global_path, "global_path");
+  DrawPath(dpw_, global_path, "global_path", 0);
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
   const auto local_path = local_path_finder_.FindPath(
-      obstacle_detector_.GetDynamicFeatures(), est_pose.tra, global_waypoint);
+      ped_detector_, est_pose.tra, global_waypoint, est_vel.tra);
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
-  DrawPath(dpw_, local_path, "local_path");
+  DrawPath(dpw_, local_path, "local_path", 1);
+  const auto candidates = local_path_finder_.GetCandidatePaths(
+    params::CONFIG_num_drawn_candidates);
+  for (int i = 0; i < (int)candidates.size(); i++) {
+    DrawPath(dpw_, candidates[i], "candidate_path" + std::to_string(i), 2);
+  }
   if (local_path.waypoints.empty()) {
     ROS_INFO("Local path planner failed.");
   }

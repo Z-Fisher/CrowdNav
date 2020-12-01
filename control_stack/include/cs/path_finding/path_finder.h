@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "cs/obstacle_avoidance/obstacle_detector.h"
+#include "cs/obstacle_avoidance/ped_detector.h"
 #include "cs/util/map.h"
 #include "cs/util/pose.h"
 
@@ -41,12 +42,14 @@ template <typename Position, typename Cost>
 struct Path {
   std::vector<Position> waypoints;
   Cost cost;
+  double dist_from_goal;
+  float collision_prob;
 
-  Path() : waypoints(), cost(0) {}
-  Path(const std::vector<Position>& waypoints, const Cost& cost)
-      : waypoints(waypoints), cost(cost) {}
+  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0) {}
+  Path(const std::vector<Position>& waypoints, const Cost& cost, const double dist_from_goal)
+      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal) {}
 
-  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost) {}
+  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal) {}
   Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)) {}
   Path& operator=(const Path& p) {
     this->waypoints = p.waypoints;
@@ -105,10 +108,9 @@ class PathFinder {
         robot_radius_(robot_radius),
         safety_margin_(safety_margin),
         inflation_(inflation) {}
+        
+  virtual std::vector<Path2f> GetCandidatePaths(int num_paths) = 0;
 
-  virtual Path2f FindPath(const util::DynamicFeatures& dynamic_map,
-                          const Eigen::Vector2f& start,
-                          const Eigen::Vector2f& goal) = 0;
 };
 
 }  // namespace path_finding

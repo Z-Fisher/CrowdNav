@@ -51,11 +51,12 @@
 #include "cs/util/pose.h"
 #include "cs/util/twist.h"
 #include "cs/util/util.h"
+#include "cs/util/ped_vector.h"
 #include "cs/util/visualization.h"
 #include "shared/math/geometry.h"
 #include "shared/math/math_util.h"
 #include "shared/util/timer.h"
-
+#include <control_stack/Obstacles.h>
 
 namespace cs {
 namespace main {
@@ -90,6 +91,7 @@ struct ControllerList {
                  const util::vector_map::VectorMap& map,
                  const state_estimation::StateEstimator& state_estimator,
                  const obstacle_avoidance::ObstacleDetector& obstacle_detector,
+                 const ped_detection::PedDetector& ped_detector,
                  const motion_planning::PIDController& motion_planner,
                  cs::controllers::ControllerType current_controller)
       : current_controller_(current_controller) {
@@ -99,6 +101,7 @@ struct ControllerList {
                                                          map,
                                                          state_estimator,
                                                          obstacle_detector,
+                                                         ped_detector,
                                                          motion_planner));
     controller_array[cs::controllers::ControllerType::ESCAPE_COLLISION] =
         ControllerPtr(
@@ -107,6 +110,7 @@ struct ControllerList {
                                                            map,
                                                            state_estimator,
                                                            obstacle_detector,
+                                                           ped_detector,
                                                            motion_planner));
 
     for (const auto& p : controller_array) {
@@ -145,6 +149,7 @@ struct ControllerList {
 class StateMachine {
  private:
   util::LaserScan laser_;
+  util::PedVector ped_vector_;
   ros::Time laser_update_time_;
   ros::Time ped_update_time_;
   util::Twist odom_;
@@ -293,9 +298,11 @@ class StateMachine {
                          map_,
                          *state_estimator_,
                          obstacle_detector_,
+                         *ped_detector_,
                          motion_planner_,
                          cs::controllers::ControllerType::NAVIGATION),
         pub_sub_prefix_(pub_sub_prefix) {}
+
 
   Eigen::Affine2f GetLaserOffset() {
     Eigen::Affine2f a = Eigen::Affine2f::Identity();
@@ -320,9 +327,10 @@ class StateMachine {
     state_estimator_->UpdateLaser(laser_, laser_update_time_);
   }
 
-  void UpdatePeds(const sensor_msgs::LaserScan& msg) {
-    ped_update_time_ = msg.header.stamp;
-    ped_detector_->UpdatePeds(laser_, ped_update_time_);
+  void UpdatePeds(const control_stack::Obstacles::ConstPtr& msg) {
+    ped_update_time_ = msg->header.stamp;
+    ped_vector_ = util::PedVector(msg);
+    ped_detector_->UpdatePeds(ped_vector_, ped_update_time_);
   }
 
   void UpdateOdom(const nav_msgs::Odometry& msg) {
@@ -343,7 +351,12 @@ class StateMachine {
     dpw_->map_pub_.publish(
         visualization::DrawWalls(map_.lines, "map", "map_ns"));
     DrawRobot(map_, command);
-    return command_scaler_->ScaleCommand(command);
+    
+    // TODO: causes robot to stay still - delete this later
+    (void) command;
+    const util::Twist bad_command(0, 0, 0);
+
+    return command_scaler_->ScaleCommand(bad_command);
   }
 };
 
