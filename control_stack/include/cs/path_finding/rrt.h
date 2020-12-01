@@ -67,7 +67,7 @@ class RRT : public PathFinder {
     return sqrt(pow(path.waypoints.back()[0] - goal[0], 2) + pow(path.waypoints.back()[1] - goal[1], 2));
   }
 
-  // TODO: Calculates to probability of colliding with a pedestrian along a path
+  // Calculates to probability of colliding with a pedestrian along a path
   float find_collision_prob_(const ped_detection::PedDetector& ped_detector, const Path2f& path,
     const Eigen::Vector2f&  start, const Eigen::Vector2f&  vel) {
     (void) ped_detector;
@@ -121,11 +121,23 @@ class RRT : public PathFinder {
       float cdf_hi_y = 0.5 * std::erfc(-(y_hi- mean_y)/(sigma*sqrt(2)));
       float cdf_lo_y = 0.5 * std::erfc(-(y_lo- mean_y)/(sigma*sqrt(2)));
       float p_y = cdf_hi_y - cdf_lo_y;
-
+      
       float prob_single_collision = p_x * p_y;
+      ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+      ped.pose.tra.x(), 
+      ped.pose.tra.y(), 
+      start.x(), 
+      start.y(),
+      ped.vel.tra.x(),
+      ped.vel.tra.y(),
+      vel.x(),
+      vel.y(),
+      t_min,
+      sigma,
+      collision_radius,
+      prob_single_collision);
       prob_no_collision *= (1 - prob_single_collision);
     }
-
 
     return 1 - prob_no_collision;
   }
@@ -177,7 +189,8 @@ class RRT : public PathFinder {
       calculate_cost_(path, ped_detector, start, goal, est_vel);
       paths_.push_back(path);
       // ROS_INFO("Goal: x: %f, y: %f ", goal[0], goal[1]);
-      // ROS_INFO("Path: x: %f, y: %f, dist: %f, cost: %f", path.waypoints[1][0], path.waypoints[1][1], path.dist_from_goal, path.cost);
+      // ROS_INFO("Path: i: %i, x: %f, y: %f, dist: %f, p_collision: %f, cost: %f", 
+      // i, path.waypoints[1].x(), path.waypoints[1].y(), path.dist_from_goal, path.collision_prob, path.cost);
     }
 
 

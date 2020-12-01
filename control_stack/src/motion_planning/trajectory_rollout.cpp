@@ -121,8 +121,10 @@ TrajectoryRollout::TrajectoryRollout(const util::Pose& start_pose,
       rotate_circle_center(0, 0),
       rotate_circle_radius(0),
       final_pose({0, 0}, 0) {
-  NP_CHECK(current_v.tra.y() == 0);
-  NP_CHECK(commanded_v.tra.y() == 0);
+  // NP_CHECK(current_v.tra.y() == 0);
+  // NP_CHECK(commanded_v.tra.y() == 0);
+  NP_FINITE(current_v.tra.y());
+  NP_FINITE(commanded_v.tra.y());
   NP_FINITE(current_v.tra.x());
   NP_FINITE(commanded_v.tra.x());
   NP_FINITE(current_v.rot);
