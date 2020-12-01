@@ -1,4 +1,4 @@
-<launch>
+  <launch>
 
 
   <!-- WARNING:
@@ -16,7 +16,7 @@
   <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
-  <arg name="loc" default ="700_mingling"/>
+  <arg name="loc" default ="700_1obst"/>
   <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/$(arg loc).xml"/>
   <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
   <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/$(arg loc).world"/>

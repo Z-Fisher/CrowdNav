@@ -9,8 +9,8 @@
 
 
   <!--Robot Waypoints-->
-  <waypoint id="robot_goal" x="5" y="5" r="1" b="4"/>
-  <waypoint id="robot_start" x="25" y="5" r="1" b="3"/>
+  <waypoint id="robot_goal" x="25" y="5" r="1" b="4"/>
+  <waypoint id="robot_start" x="5" y="5" r="1" b="3"/>
 
   <!--Robot-->
   <agent x="15" y="5" n="1" dx="0" dy="0" type="2">

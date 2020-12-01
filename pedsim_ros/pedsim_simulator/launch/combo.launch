@@ -8,8 +8,8 @@
 
 
   <!-- Robot args -->
-  <arg name="robot_x_pos" default="10.0"/>
-  <arg name="robot_y_pos" default="10.0"/>
+  <arg name="robot_x_pos" default="15.0"/>
+  <arg name="robot_y_pos" default="5.0"/>
   <arg name="goal_threshold" default="0.5"/>
 
   <!-- Pedestrian args -->
@@ -17,7 +17,7 @@
 
   <!-- Map file args -->
   <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/social_contexts.xml"/>
-  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/social_contexts_activities.rviz"/>
+  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
   <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/social_contexts.world"/>
   <arg name="nav_config_path" default="$(find control_stack)/config/nav_config.lua"/>
 
