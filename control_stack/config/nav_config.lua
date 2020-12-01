@@ -21,6 +21,7 @@
 -- SOFTWARE.
 -- ========================================================================
 
+
 laser = {
   deadzones = {}; -- {0, 85, 640, 725}
   center_offset = {0.2, 0};
@@ -40,12 +41,11 @@ pf = {
   kRotateStdDev = 0.06;
   kTemporalConsistencyWeight = 0;
 
-  -- kMap = "../rosbuild_ws/simulator/f1tenth_simulator/maps/GDC3.txt";
-  map = "src/CrowdNav/control_stack/maps/empty.map"; -- irrelevant
-
-  -- temporarily hardcoding start position and global goal
-  goal_poses = {{24,24,0.2}}; --get_goals();
-  start_pose = {10,10,0}; --get_goals()[3];
+  -- *********************************************
+  map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  goal_poses = {{15,25,0}};
+  start_pose = {15,5,0};
+  -- *********************************************
 
   kRobotRadius = 0.1;
   kSafetyMargin = 0.16;
@@ -76,10 +76,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 10; -- previously 0.2
-  kMaxTraVel = 50; -- previously 1
-  kMaxRotAcc = 10; -- previously 2.5
-  kMaxRotVel = 10; -- previously 1
+  kMaxTraAcc = 0.2; -- previously 0.2   --10
+  kMaxTraVel = 1; -- previously 1     --50
+  kMaxRotAcc = 2.5; -- previously 2.5   --10
+  kMaxRotVel = 1; -- previously 1     --10
 };
 
 safety = {
@@ -118,7 +118,11 @@ esc_collision = {
 };
 
 rrt = {
+<<<<<<< HEAD
   num_samples = 8;
+=======
+  num_samples = 24;
+>>>>>>> stable_integration_demo
   cost_bias = 20.0;
   path_length = 3.0;
   num_paths_visualized = 8;

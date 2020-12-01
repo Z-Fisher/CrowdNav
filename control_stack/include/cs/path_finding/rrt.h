@@ -196,8 +196,8 @@ class RRT : public PathFinder {
 
     // Find the minimum cost path
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
-                                    [](const Path2f& a, const Path2f& b){
-        return a.cost < b.cost;
+                                [](const Path2f& a, const Path2f& b){
+      return a.cost < b.cost;
     });
     // ROS_INFO("start: %f, %f", start[0], start[1]);
     // ROS_INFO("Path waypoint size: %i", (int) paths_.size());
@@ -210,7 +210,12 @@ class RRT : public PathFinder {
   }
 
   std::vector<Path2f> GetCandidatePaths(int num_paths) override {
-    return std::vector<Path2f>(paths_.begin(), paths_.begin() + num_paths);
+    /* THIS DOES NOT WORK YET
+    auto sorted_paths = *std::sort(begin(paths_), end(paths_), 
+                                   [](const Path2f& a, const Path2f& b){
+      return a.cost < b.cost;
+    }*/
+    return std::vector<Path2f>(paths_.begin() + 1, paths_.begin() + num_paths);
   }
 };
 

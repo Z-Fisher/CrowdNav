@@ -1,4 +1,4 @@
-  <launch>
+<launch>
 
 
   <!-- WARNING:
@@ -8,16 +8,16 @@
 
 
   <!-- Robot args -->
-  <arg name="robot_x_pos" default="10.0"/>
-  <arg name="robot_y_pos" default="10.0"/>
+  <arg name="robot_x_pos" default="15.0"/>
+  <arg name="robot_y_pos" default="5.0"/>
   <arg name="goal_threshold" default="0.5"/>
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
 
   <!-- Map file args -->
-  <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/social_contexts.xml"/>
-  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
+  <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/700_control.xml"/>
+  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/social_contexts_activities_OG.rviz"/>
   <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/social_contexts.world"/>
   <arg name="nav_config_path" default="$(find control_stack)/config/nav_config.lua"/>
 
@@ -27,7 +27,6 @@
 
 
   <!-- **************************************************************************** -->
-
 
   <!-- Pedsim Environment -->
   <include file="$(find pedsim_simulator)/launch/simulator.launch">
@@ -56,7 +55,7 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(arg gazebo_map_path)"/>
   </include>
-    
+
   <!-- Gazebo Updates (this node spawn pedsim actors to gazebo once, then the plugin updates their pose) -->  
   <node pkg="pedsim_gazebo_plugin" type="spawn_pedsim_agents.py" name="spawn_pedsim_agents" output="screen">
     <param name="immortal_peds" value="$(arg immortal_peds)"/>
@@ -76,7 +75,7 @@
   <!-- Robot Navigation -->
   <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true"> <!--output="screen"-->
     <param name="config_file_path" value="$(arg nav_config_path)"/>
-  </node> 
+  </node>
 
   <!-- Performance Metrics -->
   <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen">

@@ -3,6 +3,14 @@
     <!-- this file is auto generated using pedsim_gazebo_plugin pkg -->    
     <sdf version="1.5">
       <world name="default">
+
+
+        <!-- default camera perspective -->
+        <gui>
+          <camera name="gzclient_camera">
+            <pose>14.5 15 40 0 1.57 0</pose>
+          </camera>
+        </gui>   
       
       <!-- Ground Plane -->
       
@@ -227,7 +235,7 @@
             <plugin name="ActorPosesPlugin" filename="libActorPosesPlugin.so">
         </plugin>
     
-    
+
       </world>
     </sdf>
     
