@@ -45,11 +45,11 @@
 namespace util {
     struct Pedestrian {
         Pose pose;
-        Twist twist;
+        Twist vel;
         float radius;
         float true_radius;
         Pedestrian(const geometry_msgs::Point& point, const geometry_msgs::Vector3& vel,
-            const float rad, const float true_rad) : pose(point.x, point.y, 0), twist(vel.x, vel.y, 0) {
+            const float rad, const float true_rad) : pose(point.x, point.y, 0), vel(vel.x, vel.y, 0) {
                 radius = rad;
                 true_radius = true_rad;
             }
