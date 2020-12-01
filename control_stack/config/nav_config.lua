@@ -118,7 +118,7 @@ esc_collision = {
 };
 
 rrt = {
-  num_samples = 4;
+  num_samples = 24;
   cost_bias = 20.0;
   path_length = 3.0;
   num_paths_visualized = 4;

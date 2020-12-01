@@ -17,7 +17,7 @@
 
   <!-- Map file args -->
   <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/social_contexts.xml"/>
-  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/social_contexts_activities.rviz"/>
+  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
   <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/social_contexts.world"/>
   <arg name="nav_config_path" default="$(find control_stack)/config/nav_config.lua"/>
 
@@ -76,7 +76,7 @@
   <!-- Robot Navigation -->
   <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true"> <!--output="screen"-->
     <param name="config_file_path" value="$(arg nav_config_path)"/>
-  </node>
+  </node> 
 
   <!-- Performance Metrics -->
   <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen">

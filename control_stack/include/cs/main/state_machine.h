@@ -353,10 +353,10 @@ class StateMachine {
     DrawRobot(map_, command);
     
     // TODO: causes robot to stay still - delete this later
-    (void) command;
-    const util::Twist bad_command(0, 0, 0);
+    //(void) command;
+    //const util::Twist bad_command(0, 0, 0);
 
-    return command_scaler_->ScaleCommand(bad_command);
+    return command_scaler_->ScaleCommand(command);
   }
 };
 
