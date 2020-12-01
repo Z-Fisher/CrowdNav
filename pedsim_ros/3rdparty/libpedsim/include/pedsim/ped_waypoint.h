@@ -26,7 +26,7 @@ class Tagent;
 class LIBEXPORT Twaypoint {
  public:
   enum WaypointType { AreaWaypoint = 0, PointWaypoint = 1 };
-  enum Behavior { SIMPLE = 0, SOURCE = 1, SINK = 2 };
+  enum Behavior { SIMPLE = 0, SOURCE = 1, SINK = 2, START = 3, GOAL = 4};
 
  public:
   Twaypoint(double xIn = 0, double yIn = 0);

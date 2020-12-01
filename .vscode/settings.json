@@ -68,6 +68,6 @@
         "set": "cpp",
         "string": "cpp",
         "string_view": "cpp",
-        "core": "cpp"
+        "regex": "cpp"
     }
 }
