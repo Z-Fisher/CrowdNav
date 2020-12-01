@@ -14,6 +14,12 @@ int main(int argc, char** argv){
       tf::StampedTransform(
         tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.1, 0.0, 0.2)),
         ros::Time::now(),"base_footprint", "base_scan"));
+    
+    broadcaster.sendTransform(
+      tf::StampedTransform(
+        tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.0, 0.0, 0.0)),
+        ros::Time::now(),"base_scan", "robot/laser"));
+
     r.sleep();
   }
 }

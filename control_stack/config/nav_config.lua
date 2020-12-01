@@ -43,8 +43,8 @@ pf = {
 
   -- *********************************************
   map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
-  goal_poses = {{24,24,0}};
-  start_pose = {10,10,0};
+  goal_poses = {{15,25,0}};
+  start_pose = {15,5,0};
   -- *********************************************
 
   kRobotRadius = 0.1;
@@ -76,10 +76,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 10; -- previously 0.2
-  kMaxTraVel = 50; -- previously 1
-  kMaxRotAcc = 10; -- previously 2.5
-  kMaxRotVel = 10; -- previously 1
+  kMaxTraAcc = 0.2; -- previously 0.2   --10
+  kMaxTraVel = 1; -- previously 1     --50
+  kMaxRotAcc = 2.5; -- previously 2.5   --10
+  kMaxRotVel = 1; -- previously 1     --10
 };
 
 safety = {

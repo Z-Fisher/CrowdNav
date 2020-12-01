@@ -89,6 +89,7 @@ void goal_cb(const visualization_msgs::MarkerArray& msg) {
     float dist_x = goal_x - prev_x;
     float dist_y = goal_y - prev_y;
     dist_to_goal = sqrt(pow(dist_x,2) + pow(dist_y,2));
+    //ROS_INFO("%f", dist_to_goal);
 }	
 
 
@@ -116,7 +117,7 @@ int main(int argc, char **argv) {
     ros::Rate rate(30.0);
     while (ros::ok()) {
         ros::spinOnce();
-
+        
         if (dist_to_goal <= goal_threshold) {
             auto finish = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> elapsed = finish - start;

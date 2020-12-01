@@ -14,8 +14,8 @@
   <waypoint id="coffee_entry" x="5" y="25" r="5"/>
   <waypoint id="coffee_exit" x="5" y="5" r="5"/>
 
-  <waypoint id="robot_goal" x="22" y="27" r="2"/>
-  <waypoint id="robot_start" x="4" y="4" r="2"/>
+  <waypoint id="robot_goal" x="24" y="24" r="1" b="4"/>
+  <waypoint id="robot_start" x="10" y="10" r="1" b="3"/>
 
   <queue id="info_desk" x="20" y="15" direction="0"/>
 

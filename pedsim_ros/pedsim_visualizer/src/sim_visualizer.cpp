@@ -269,23 +269,42 @@ void SimVisualizer::publishWaypointVisuals() {
 
     switch (waypoint.behavior) {
       case pedsim_msgs::Waypoint::BHV_SIMPLE: {
-        wp_marker.color.r = 1.0;
-        wp_marker.color.g = 0.95;
-        wp_marker.color.b = 0.7;
+        wp_marker.color.r = 0.0;
+        wp_marker.color.g = 0.0;
+        wp_marker.color.b = 0.0;
+        wp_marker.color.a = 0.0;
         break;
       }
       case pedsim_msgs::Waypoint::BHV_SOURCE: {
         wp_marker.color.r = 0.0;
-        wp_marker.color.g = 1.0;
-        wp_marker.color.b = 1.0;
+        wp_marker.color.g = 0.0;
+        wp_marker.color.b = 0.0;
+        wp_marker.color.a = 0.0;
         text += "(source)";
         break;
       }
       case pedsim_msgs::Waypoint::BHV_SINK: {
-        wp_marker.color.r = 1.0;
-        wp_marker.color.g = 0.37;
-        wp_marker.color.b = 0.07;
+        wp_marker.color.r = 0.0;
+        wp_marker.color.g = 0.0;
+        wp_marker.color.b = 0.0;
+        wp_marker.color.a = 0.0;
         text += "(sink)";
+        break;
+      }
+      case pedsim_msgs::Waypoint::BHV_START: {
+        wp_marker.color.r = 0.0;
+        wp_marker.color.g = 1.0;
+        wp_marker.color.b = 0.0;
+        wp_marker.color.a = 1.0;
+        text += "(Start)";
+        break;
+      }
+      case pedsim_msgs::Waypoint::BHV_GOAL: {
+        wp_marker.color.r = 1.0;
+        wp_marker.color.g = 0.0;
+        wp_marker.color.b = 0.0;
+        wp_marker.color.a = 1.0;
+        text += "(Goal)";
         break;
       }
     }
