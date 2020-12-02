@@ -42,7 +42,8 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  --map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{15,25,0}};
   start_pose = {15,5,0};
   -- *********************************************
@@ -118,11 +119,7 @@ esc_collision = {
 };
 
 rrt = {
-<<<<<<< HEAD
   num_samples = 8;
-=======
-  num_samples = 24;
->>>>>>> stable_integration_demo
   cost_bias = 20.0;
   path_length = 3.0;
   num_paths_visualized = 8;
