@@ -29,12 +29,9 @@
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
      
-  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+  <source x="2" y="5" n="1" dx="5" dy="5" type="1">
     <addwaypoint id="ped_kill"/>
   </source>
 
-  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
-    <addwaypoint id="ped_kill"/>
-  </source>
 
 </scenario>

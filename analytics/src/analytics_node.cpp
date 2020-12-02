@@ -73,6 +73,7 @@ void pose_cb(const nav_msgs::Odometry& msg) {
             moving = false;
         }
     }
+
 }	
 
 // Gets remaining distance to goal
@@ -89,7 +90,6 @@ void goal_cb(const visualization_msgs::MarkerArray& msg) {
     float dist_x = goal_x - prev_x;
     float dist_y = goal_y - prev_y;
     dist_to_goal = sqrt(pow(dist_x,2) + pow(dist_y,2));
-    //ROS_INFO("%f", dist_to_goal);
 }	
 
 

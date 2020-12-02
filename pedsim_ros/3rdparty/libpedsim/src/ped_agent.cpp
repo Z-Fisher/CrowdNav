@@ -12,6 +12,12 @@
 #include <cmath>
 #include <random>
 
+//********* true: peds are blind to robot. false: peds are aware of robot.
+//***********************************************************************
+bool blind_peds = false;
+//***********************************************************************
+//***********************************************************************
+
 using namespace std;
 
 default_random_engine generator;
@@ -157,6 +163,8 @@ Ped::Tvector Ped::Tagent::socialForce() const {
 
     // compute difference between both agents' positions
     Tvector diff = other->p - p;
+
+    if (other->getType() == ROBOT && blind_peds) continue;
 
     if(other->getType() == ROBOT) diff /= robotPosDiffScalingFactor;
 

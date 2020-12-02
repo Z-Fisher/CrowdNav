@@ -23,7 +23,7 @@
   <arg name="nav_config_path" default="$(find control_stack)/config/nav_config_$(arg loc).lua"/>
 
   <!-- Simulator args -->
-  <arg name="simulation_factor" default="2.0"/> <!-- Speed up -->
+  <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
 
 
