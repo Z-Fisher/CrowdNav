@@ -118,8 +118,13 @@ esc_collision = {
 };
 
 rrt = {
-  num_samples = 4;
-  cost_bias = 1.0;
-  path_length = 10.0;
-  num_paths_visualized = 4;
+  num_samples = 8;
+  cost_bias = 20.0;
+  path_length = 3.0;
+  num_paths_visualized = 8;
+  ped_var_scale = 0.5;
+  ped_var_power = 1;
+  robot_radius = 0.35;
+  collision_buffer = 0;
+  t_horizon = 5;
 }

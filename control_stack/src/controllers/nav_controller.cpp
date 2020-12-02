@@ -145,6 +145,7 @@ void NavController::RefreshGoal() {
 
 std::pair<ControllerType, util::Twist> NavController::Execute() {
   const auto est_pose = state_estimator_.GetEstimatedPose();
+  const auto est_vel = state_estimator_.GetEstimatedVelocity();
   ROS_INFO("Robot pose: %f, %f", est_pose.tra.x(), est_pose.tra.y());
 
   const auto laser_points_wf = laser_.TransformPointsFrameSparse(
@@ -156,9 +157,11 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   const float total_margin =
       (params::CONFIG_robot_radius + params::CONFIG_safety_margin + kEpsilon) *
       params::CONFIG_local_inflation;
-  if (!IsPointCollisionFree(est_pose.tra, laser_points_wf, total_margin)) {
-    return {ControllerType::ESCAPE_COLLISION, {}};
-  }
+      
+  // UNCOMMENT FOR ESCAPE COLLISION FUNCTIONALITY
+  // if (!IsPointCollisionFree(est_pose.tra, laser_points_wf, total_margin)) {
+  //   return {ControllerType::ESCAPE_COLLISION, {}};
+  // }
 
   RefreshGoal();
 
@@ -168,7 +171,7 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
   const auto local_path = local_path_finder_.FindPath(
-      ped_detector_, est_pose.tra, global_waypoint);
+      ped_detector_, est_pose.tra, global_waypoint, est_vel.tra);
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
   DrawPath(dpw_, local_path, "local_path", 1);

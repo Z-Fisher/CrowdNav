@@ -84,6 +84,10 @@ struct ControllerList {
   using ControllerPtr = std::unique_ptr<cs::controllers::Controller>;
   std::array<ControllerPtr, cs::controllers::ControllerType::CONTROLLER_NUM>
       controller_array;
+
+  // std::array<ControllerPtr, 1>
+  //     controller_array;
+
   cs::controllers::ControllerType current_controller_;
 
   ControllerList(cs::main::DebugPubWrapper* dpw,
@@ -353,10 +357,12 @@ class StateMachine {
     DrawRobot(map_, command);
     
     // TODO: causes robot to stay still - delete this later
-    (void) command;
-    const util::Twist bad_command(0, 0, 0);
+    // (void) command;
+    // const util::Twist bad_command(0, 0, 0);
 
-    return command_scaler_->ScaleCommand(bad_command);
+    // return command_scaler_->ScaleCommand(bad_command);
+
+    return command_scaler_->ScaleCommand(command);
   }
 };
 

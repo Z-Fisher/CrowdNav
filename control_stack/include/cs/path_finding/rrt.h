@@ -41,6 +41,8 @@
 #include "shared/math/geometry.h"
 #include "shared/math/math_util.h"
 
+
+
 namespace cs {
 namespace path_finding {
 
@@ -48,6 +50,11 @@ namespace params {
 CONFIG_INT(num_samples, "rrt.num_samples");
 CONFIG_FLOAT(cost_bias, "rrt.cost_bias");
 CONFIG_FLOAT(path_length, "rrt.path_length");
+CONFIG_FLOAT(ped_var_scale, "rrt.ped_var_scale");
+CONFIG_FLOAT(ped_var_power, "rrt.ped_var_power");
+CONFIG_FLOAT(robot_radius, "rrt.robot_radius");
+CONFIG_FLOAT(collision_buffer, "rrt.collision_buffer");
+CONFIG_FLOAT(t_horizon, "rrt.t_horizon");
 }  // namespace params
 
 template <int max_samples>
@@ -60,11 +67,79 @@ class RRT : public PathFinder {
     return sqrt(pow(path.waypoints.back()[0] - goal[0], 2) + pow(path.waypoints.back()[1] - goal[1], 2));
   }
 
-  // TODO: Calculates to probability of colliding with a pedestrian along a path
-  float find_collision_prob_(const ped_detection::PedDetector& ped_detector, const Path2f& path) {
+  // Calculates to probability of colliding with a pedestrian along a path
+  float find_collision_prob_(const ped_detection::PedDetector& ped_detector, const Path2f& path,
+    const Eigen::Vector2f&  start, const Eigen::Vector2f&  vel) {
     (void) ped_detector;
     (void) path;
-    return -1;
+    // ROS_INFO("\nNew Loop");
+
+    float prob_no_collision = 1;
+
+    for (auto ped: ped_detector.GetPeds().peds) {
+    
+      // Calculate t_min
+      float numerator_x = (ped.pose.tra.x() - start.x()) * (vel.x() - ped.vel.tra.x());
+      float numerator_y = (ped.pose.tra.y() - start.y()) * (vel.y() - ped.vel.tra.y());
+      float numerator = numerator_x + numerator_y;
+      float denom = (pow(vel.x() - ped.vel.tra.x(), 2) + pow(vel.y() - ped.vel.tra.y(), 2));
+      float t_min = numerator / denom;
+
+      if (t_min > params::CONFIG_t_horizon) {
+        t_min = params::CONFIG_t_horizon;
+      }
+
+      if (t_min < 0) {
+        t_min = 0;
+      }
+
+      // Calculate ped distrubtion params
+      float sigma = sqrt(params::CONFIG_ped_var_scale * pow(t_min, params::CONFIG_ped_var_power));
+      float mean_x = ped.pose.tra.x() + ped.vel.tra.x() * t_min;
+      float mean_y = ped.pose.tra.y()  + ped.vel.tra.y() * t_min;
+
+      float x_robot = start.x() + vel.x() * t_min;
+      float y_robot = start.y() + vel.y() * t_min;
+      float collision_radius = params::CONFIG_robot_radius + ped.radius + params::CONFIG_collision_buffer;
+
+      float x_lo = x_robot - collision_radius / 2;
+      float x_hi = x_robot + collision_radius / 2;
+      float y_lo = y_robot - collision_radius / 2;
+      float y_hi = y_robot + collision_radius / 2;
+
+
+    //   ROS_INFO("ped: x: %f, y: %f, vx: %f, vy: %f, r: %f", 
+    //     ped.pose.tra.x(), 
+    //     ped.pose.tra.y(), 
+    //     ped.twist.tra.x(), 
+    //     ped.twist.tra.y(),
+    //     ped.radius);
+      float cdf_hi_x = 0.5 * std::erfc(-(x_hi- mean_x)/(sigma*sqrt(2)));
+      float cdf_lo_x = 0.5 * std::erfc(-(x_lo- mean_x)/(sigma*sqrt(2)));
+      float p_x = cdf_hi_x - cdf_lo_x;
+
+      float cdf_hi_y = 0.5 * std::erfc(-(y_hi- mean_y)/(sigma*sqrt(2)));
+      float cdf_lo_y = 0.5 * std::erfc(-(y_lo- mean_y)/(sigma*sqrt(2)));
+      float p_y = cdf_hi_y - cdf_lo_y;
+      
+      float prob_single_collision = p_x * p_y;
+      ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+      ped.pose.tra.x(), 
+      ped.pose.tra.y(), 
+      start.x(), 
+      start.y(),
+      ped.vel.tra.x(),
+      ped.vel.tra.y(),
+      vel.x(),
+      vel.y(),
+      t_min,
+      sigma,
+      collision_radius,
+      prob_single_collision);
+      prob_no_collision *= (1 - prob_single_collision);
+    }
+
+    return 1 - prob_no_collision;
   }
 
 
@@ -72,9 +147,12 @@ class RRT : public PathFinder {
   // colliding with a pedestrian along the path
   void calculate_cost_(
     Path2f& path,
-    const ped_detection::PedDetector& ped_detector, 
-    const Eigen::Vector2f& goal) {
-      float collision_prob = find_collision_prob_(ped_detector, path);
+    const ped_detection::PedDetector& ped_detector,
+    const Eigen::Vector2f& start,
+    const Eigen::Vector2f& goal,
+    const Eigen::Vector2f& vel
+    ) {
+      float collision_prob = find_collision_prob_(ped_detector, path, start, vel);
       float dist_from_goal = euclid_dist_(path, goal);
       float cost = dist_from_goal + params::CONFIG_cost_bias * collision_prob;
       path.collision_prob = collision_prob;
@@ -92,8 +170,9 @@ class RRT : public PathFinder {
 
   // Calculates the cost for each sampled path and returns the lowest cost path
   Path2f FindPath(const ped_detection::PedDetector& ped_detector,
-                  const Eigen::Vector2f& start,
-                  const Eigen::Vector2f& goal) {    
+                  const Eigen::Vector2f&  start,
+                  const Eigen::Vector2f& goal,
+                  const Eigen::Vector2f& est_vel) {    
     (void) goal;
     (void) ped_detector;
     paths_.clear();
@@ -107,10 +186,11 @@ class RRT : public PathFinder {
       path.waypoints.push_back(start);
       path.waypoints.push_back(start + sample);
 
-      calculate_cost_(path, ped_detector, goal);
+      calculate_cost_(path, ped_detector, start, goal, est_vel);
       paths_.push_back(path);
       // ROS_INFO("Goal: x: %f, y: %f ", goal[0], goal[1]);
-      // ROS_INFO("Path: x: %f, y: %f, dist: %f, cost: %f", path.waypoints[1][0], path.waypoints[1][1], path.dist_from_goal, path.cost);
+      // ROS_INFO("Path: i: %i, x: %f, y: %f, dist: %f, p_collision: %f, cost: %f", 
+      // i, path.waypoints[1].x(), path.waypoints[1].y(), path.dist_from_goal, path.collision_prob, path.cost);
     }
 
 
