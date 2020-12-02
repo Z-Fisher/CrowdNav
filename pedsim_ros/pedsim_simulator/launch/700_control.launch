@@ -16,13 +16,14 @@
   <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
 
   <!-- Map file args -->
-  <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/700_control.xml"/>
-  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/social_contexts_activities_OG.rviz"/>
-  <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/social_contexts.world"/>
-  <arg name="nav_config_path" default="$(find control_stack)/config/nav_config.lua"/>
+  <arg name="loc" default ="700_control"/>
+  <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/$(arg loc).xml"/>
+  <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
+  <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/$(arg loc).world"/>
+  <arg name="nav_config_path" default="$(find control_stack)/config/nav_config_$(arg loc).lua"/>
 
   <!-- Simulator args -->
-  <arg name="simulation_factor" default="2.0"/> <!-- Speed up -->
+  <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
 
 

@@ -33,6 +33,7 @@ void pose_cb(const nav_msgs::Odometry& msg) {
 
     float x = msg.pose.pose.position.x;
     float y = msg.pose.pose.position.y;
+
     float dist_x = 0.0;
     float dist_y = 0.0;
     float dist;
@@ -80,12 +81,23 @@ void goal_cb(const visualization_msgs::MarkerArray& msg) {
 
     // initial dist_to_goal is incorrect but as long as 
     // sim runs for a couple iterations, will be OK
-    if (first_goal) {
-        goal_x = msg.markers[0].pose.position.x;
-        goal_y = msg.markers[0].pose.position.y;
-        first_goal = false;
-    }
+    // if (first_goal) {
+    //     goal_x = msg.markers[0].pose.position.x;
+    //     goal_y = msg.markers[0].pose.position.y;
+    //     first_goal = false;
+    // }
 
+    if (first_goal) {
+        for (int i=0; i<1000; i++) {
+            if (msg.markers[i].ns == "robot_goal") {
+                goal_x = msg.markers[i].pose.position.x;
+                goal_y = msg.markers[i].pose.position.y;
+                first_goal = false;
+                break;
+            }
+        }
+    }
+    
     float dist_x = goal_x - prev_x;
     float dist_y = goal_y - prev_y;
     dist_to_goal = sqrt(pow(dist_x,2) + pow(dist_y,2));
@@ -108,7 +120,8 @@ int main(int argc, char **argv) {
                                             1, 	
                                             pose_cb);	
 
-    ros::Subscriber goal_sub = n.subscribe("/robot/goal",	
+    //"/robot/goal"
+    ros::Subscriber goal_sub = n.subscribe("/pedsim_visualizer/waypoints",	
                                             1, 	
                                             goal_cb);
 
@@ -117,6 +130,8 @@ int main(int argc, char **argv) {
     ros::Rate rate(30.0);
     while (ros::ok()) {
         ros::spinOnce();
+
+        //ROS_INFO("goal: %f, %f",goal_x, goal_y);
         
         if (dist_to_goal <= goal_threshold) {
             auto finish = std::chrono::high_resolution_clock::now();

@@ -172,7 +172,7 @@ class RRT : public PathFinder {
       float prob_single_collision = p_x * p_y;
 
       if (abs(ped.pose.tra.x()) < 2 && abs(ped.pose.tra.y()) < 2) {
-        ROS_ERROR("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+        ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
         ped.pose.tra.x(), 
         ped.pose.tra.y(), 
         start.x(), 

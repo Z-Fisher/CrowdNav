@@ -42,10 +42,9 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";
-  --map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
-  goal_poses = {{24,24,0}};
-  start_pose = {10,10,0};
+  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_1obst.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  goal_poses = {{12,25,0}};
+  start_pose = {12,5,0};
   -- *********************************************
 
   kRobotRadius = 0.1;
@@ -76,11 +75,12 @@ od = {
   min_trajectory_rotation = 0.005;
 };
 
+
 limits = {
-  kMaxTraAcc = 0.2; -- previously 0.2   --2
-  kMaxTraVel = 1; -- previously 1    --10
-  kMaxRotAcc = 2.5; -- previously 2.5  --25
-  kMaxRotVel = 1; -- previously 1    --10
+  kMaxTraAcc = 0.2; -- previously 0.2   --10
+  kMaxTraVel = 1; -- previously 1     --50
+  kMaxRotAcc = 2.5; -- previously 2.5   --10
+  kMaxRotVel = 1.0; -- previously 1     --10
 };
 
 safety = {
@@ -96,7 +96,7 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.75; -- Radians used to be 0.1.  VIDEOS: -0.32, 0.75
+  rotation_drive_threshold = 0.32; -- Radians used to be 0.1.
   rotation_p = 0.95; 
   rotation_i = 0.0;
   translation_p = 0.5;
@@ -119,8 +119,8 @@ esc_collision = {
 };
 
 rrt = {
-  num_samples = 48;  --VIDEOS: 24, 48
-  cost_bias = 800.0;  --800 vs 1000
+  num_samples = 48;
+  cost_bias = 1000.0;
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;

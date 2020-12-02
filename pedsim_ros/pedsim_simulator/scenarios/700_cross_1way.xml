@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario>
-  <!--Obstacles-->
-  <obstacle x1="-0.5" y1="-0.5" x2="29.5" y2="-0.5"/>
-  <obstacle x1="-0.5" y1="-0.5" x2="-0.5" y2="10.5"/>
-  <obstacle x1="-0.5" y1="10.5" x2="29.5" y2="10.5"/>
-  <obstacle x1="29.5" y1="-0.5" x2="29.5" y2="10.5"/>
-
 
 
   <!--Robot Waypoints-->
-  <waypoint id="robot_goal" x="5" y="5" r="1" b="4"/>
-  <waypoint id="robot_start" x="25" y="5" r="1" b="3"/>
+  <waypoint id="robot_goal" x="15" y="15" r="1" b="4"/>
+  <waypoint id="robot_start" x="15" y="-5" r="1" b="3"/>
 
   <!--Robot-->
   <agent x="15" y="5" n="1" dx="0" dy="0" type="2">
@@ -29,9 +23,12 @@
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
      
-  <source x="2" y="5" n="1" dx="5" dy="5" type="1">
+  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
     <addwaypoint id="ped_kill"/>
   </source>
 
+  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+    <addwaypoint id="ped_kill"/>
+  </source>
 
 </scenario>
