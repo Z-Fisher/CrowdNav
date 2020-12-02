@@ -197,11 +197,9 @@ class RRT : public PathFinder {
   }
 
   std::vector<Path2f> GetCandidatePaths(int num_paths) override {
-    /* THIS DOES NOT WORK YET
-    auto sorted_paths = *std::sort(begin(paths_), end(paths_), 
-                                   [](const Path2f& a, const Path2f& b){
+    std::sort(paths_.begin(), paths_.end(),[](const Path2f& a, const Path2f& b){
       return a.cost < b.cost;
-    }*/
+    });
     return std::vector<Path2f>(paths_.begin() + 1, paths_.begin() + num_paths);
   }
 };

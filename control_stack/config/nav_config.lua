@@ -42,8 +42,8 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
-  goal_poses = {{15,25,0}};
+  map = "/home/ray/Projects/crowd_nav_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  goal_poses = {{24,24,0}};
   start_pose = {15,5,0};
   -- *********************************************
 
