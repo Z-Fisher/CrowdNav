@@ -171,14 +171,15 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
       est_pose, global_path, laser_points_wf, total_margin);
   const auto local_path = local_path_finder_.FindPath(
-      ped_detector_, est_pose.tra, global_waypoint, est_vel.tra);
+      ped_detector_, obstacle_detector_.GetDynamicFeatures(), motion_planner_, est_pose.tra, global_waypoint, est_vel.tra,
+      est_pose, current_goal_);
   util::Pose local_waypoint =
       GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
-  DrawPath(dpw_, local_path, "local_path", 1);
+  DrawPath(dpw_, local_path, "local_path", 2);
   const auto candidates = local_path_finder_.GetCandidatePaths(
     params::CONFIG_num_drawn_candidates);
   for (int i = 0; i < (int)candidates.size(); i++) {
-    DrawPath(dpw_, candidates[i], "candidate_path" + std::to_string(i), 2);
+    DrawPath(dpw_, candidates[i], "candidate_path" + std::to_string(i), 1);
   }
   if (local_path.waypoints.empty()) {
     ROS_INFO("Local path planner failed.");

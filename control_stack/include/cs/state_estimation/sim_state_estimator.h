@@ -75,7 +75,7 @@ class SimStateEstimator : public StateEstimator {
 
     // gather robot pose
     ground_truth_pose_ = util::Pose(msg.pose[robot_idx]);
-    last_odom_velocity_ = util::Twist(msg.twist[robot_idx]);
+    // last_odom_velocity_ = util::Twist(msg.twist[robot_idx]);
     //util::Twist robot_twist = util::Twist(msg.twist[robot_idx]);
     /*
     // update robot state. was exploring mimicking the odom and laser update method but commented everything out. 
