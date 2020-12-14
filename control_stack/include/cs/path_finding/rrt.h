@@ -99,7 +99,7 @@ class RRT : public PathFinder {
   float find_collision_prob_(const ped_detection::PedDetector& ped_detector, 
      const util::DynamicFeatures& dynamic_features,
                   const motion_planning::PIDController& motion_planner,
-                  const Path2f& path,
+                  Path2f& path,
     const Eigen::Vector2f&  start, Eigen::Vector2f  vel,
     const util::Pose& current_pose,
     const Eigen::Vector2f& global_waypoint,
@@ -114,7 +114,10 @@ class RRT : public PathFinder {
     Eigen::Vector2f new_vel;
     new_vel[0] = command.tra.x();
     new_vel[1] = command.tra.y();
+    //ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
     vel = new_vel;
+    path.SetV0(util::Twist(command));
+
     // ROS_INFO("\nNew Loop");
 
     float prob_no_collision = 1;
@@ -171,23 +174,23 @@ class RRT : public PathFinder {
       float p_y = cdf_hi_y - cdf_lo_y;
       float prob_single_collision = p_x * p_y;
 
-      if (abs(ped.pose.tra.x()) < 2 && abs(ped.pose.tra.y()) < 2) {
-        ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
-        ped.pose.tra.x(), 
-        ped.pose.tra.y(), 
-        start.x(), 
-        start.y(),
-        ped.vel.tra.x(),
-        ped.vel.tra.y(),
-        vel.x(),
-        vel.y(),
-        t_min,
-        sigma,
-        collision_radius,
-        prob_single_collision);
-        prob_no_collision *= (1 - prob_single_collision);
-      }
-     
+      // if (abs(ped.pose.tra.x()) < 2 && abs(ped.pose.tra.y()) < 2) {
+      //   ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+      //     ped.pose.tra.x(), 
+      //     ped.pose.tra.y(), 
+      //     start.x(), 
+      //     start.y(),
+      //     ped.vel.tra.x(),
+      //     ped.vel.tra.y(),
+      //     vel.x(),
+      //     vel.y(),
+      //     t_min,
+      //     sigma,
+      //     collision_radius,
+      //     prob_single_collision);
+      // }
+      
+      prob_no_collision *= (1 - prob_single_collision);
     }
 
     return 1 - prob_no_collision;
@@ -265,6 +268,7 @@ class RRT : public PathFinder {
     prev_path_ = min_cost_path;
     // ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
     // ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
+    ROS_ERROR("Predicted velocity: vx = %f, vy = %f", min_cost_path.v0.tra.x(), min_cost_path.v0.tra.y());
     return min_cost_path;
     //return SmoothPath(start, dynamic_map, path);
   }

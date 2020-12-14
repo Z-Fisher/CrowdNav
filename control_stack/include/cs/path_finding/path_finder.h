@@ -44,13 +44,14 @@ struct Path {
   Cost cost;
   double dist_from_goal;
   float collision_prob;
+  util::Twist v0;
 
-  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0) {}
+  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0), v0(util::Twist()) {}
   Path(const std::vector<Position>& waypoints, const Cost& cost, const double dist_from_goal)
-      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal) {}
+      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal), v0(util::Twist()) {}
 
-  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal) {}
-  Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)) {}
+  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal), v0(util::Twist()) {}
+  Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)), v0(util::Twist()) {}
   Path& operator=(const Path& p) {
     this->waypoints = p.waypoints;
     this->cost = p.cost;
@@ -63,6 +64,8 @@ struct Path {
   }
 
   bool IsValid() const { return !waypoints.empty(); }
+
+  void SetV0(util::Twist v) {v0 = v;}
 
   template <typename Transform>
   Path TransformPath(const Transform& t) const {

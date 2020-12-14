@@ -42,8 +42,9 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";
+  --map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";
   --map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/ray/Projects/crowd_nav_ws/src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{24,24,0}};
   start_pose = {10,10,0};
   -- *********************************************
@@ -120,7 +121,7 @@ esc_collision = {
 
 rrt = {
   num_samples = 48;  --VIDEOS: 24, 48
-  cost_bias = 800.0;  --800 vs 1000
+  cost_bias = 800.0;  --800 vs 1000 - higher number mean less likely to collide
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;

@@ -42,7 +42,8 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  --map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/ray/Projects/crowd_nav_ws/src/CrowdNav/control_stack/maps/700_against_1way.map";
   goal_poses = {{5,5,0}};
   start_pose = {25,5,0};
   -- *********************************************

@@ -13,7 +13,7 @@
   <arg name="goal_threshold" default="0.5"/>
 
   <!-- Pedestrian args -->
-  <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
+  <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
   <arg name="loc" default ="700_against_1way"/>
