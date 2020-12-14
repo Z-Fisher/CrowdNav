@@ -8,8 +8,8 @@
 
 
   <!-- Robot args -->
-  <arg name="robot_x_pos" default="15.0"/>
-  <arg name="robot_y_pos" default="5.0"/>
+  <arg name="robot_x_pos" default="10.0"/>
+  <arg name="robot_y_pos" default="10.0"/>
   <arg name="goal_threshold" default="0.5"/>
 
   <!-- Pedestrian args -->
@@ -76,7 +76,7 @@
   <!-- Robot Navigation -->
   <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true"> <!--output="screen"-->
     <param name="config_file_path" value="$(arg nav_config_path)"/>
-  </node>
+  </node> 
 
   <!-- Performance Metrics -->
   <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen">

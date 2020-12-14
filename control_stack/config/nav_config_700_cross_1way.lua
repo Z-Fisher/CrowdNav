@@ -42,9 +42,9 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/base_ws/src/CrowdNav/control_stack/maps/700_cross_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_cross_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{15,15,0}};
-  start_pose = {15,-5,0};
+  start_pose = {-5,15,0};
   -- *********************************************
 
   kRobotRadius = 0.1;
@@ -76,10 +76,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 0.2; -- previously 0.2   --10
-  kMaxTraVel = 1; -- previously 1     --50
-  kMaxRotAcc = 2.5; -- previously 2.5   --10
-  kMaxRotVel = 1; -- previously 1     --10
+  kMaxTraAcc = 0.2; -- previously 0.2   --2
+  kMaxTraVel = 1; -- previously 1    --10
+  kMaxRotAcc = 2.5; -- previously 2.5  --25
+  kMaxRotVel = 1; -- previously 1    --10
 };
 
 safety = {
@@ -95,8 +95,8 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.1; -- Radians.
-  rotation_p = 0.95; 
+  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  -- .32
+  rotation_p = 0.1; --0.95
   rotation_i = 0.0;
   translation_p = 0.5;
   stop_past_goal_threshold = 0.75;
@@ -116,3 +116,16 @@ cmd_scaler = {
 esc_collision = {
   num_safety_margins = 2;
 };
+
+rrt = {
+  num_samples = 48;
+  cost_bias = 1000.0;
+  path_length = 3.0;
+  num_paths_visualized = 4;
+  ped_var_bias = 0.707;
+  ped_var_scale = 0.5;
+  ped_var_power = 1;
+  robot_radius = 0.35;
+  collision_buffer = 0;
+  t_horizon = 5;
+}

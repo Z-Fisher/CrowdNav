@@ -14,6 +14,7 @@
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
+  <arg name="actor_limit" default="25"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
   <arg name="loc" default ="700_against_1way"/>
@@ -60,6 +61,7 @@
   <!-- Gazebo Updates (this node spawn pedsim actors to gazebo once, then the plugin updates their pose) -->  
   <node pkg="pedsim_gazebo_plugin" type="spawn_pedsim_agents.py" name="spawn_pedsim_agents" output="screen">
     <param name="immortal_peds" value="$(arg immortal_peds)"/>
+    <param name="actor_limit" value="$(arg actor_limit)"/>
   </node>
 
   <!-- Robot Constructor -->

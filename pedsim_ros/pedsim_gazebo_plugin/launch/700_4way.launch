@@ -3,7 +3,7 @@
         <!-- this file is auto generated using pedsim_gazebo_plugin pkg -->  
         
         <include file="$(find gazebo_ros)/launch/empty_world.launch">
-             <arg name="world_name" value="$(find pedsim_gazebo_plugin)/worlds/700_1obst.world"/>
+             <arg name="world_name" value="$(find pedsim_gazebo_plugin)/worlds/700_4way.world"/>
          </include>
          
          <!-- this node spawn pedsim actors to gazebo once, then the plugin updates their pose -->  

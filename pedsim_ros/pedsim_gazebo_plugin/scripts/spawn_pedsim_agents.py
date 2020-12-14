@@ -15,6 +15,7 @@ from gazebo_msgs.srv import DeleteModel
 # xml file containing a gazebo model to represent agent, currently is represented by a cubic but can be changed
 global xml_file
 immortal_pedestrians = True
+actor_limit = 25
 
 def actor_poses_callback(actors):
 
@@ -41,7 +42,7 @@ def actor_poses_callback(actors):
     else:
     
         # delete actors
-        if len(existing_actors) > 8:
+        if len(existing_actors) > actor_limit:
             delete_model_prox(existing_actors[1]) 
             removed_actors.append(existing_actors[1])
             existing_actors.pop(1)
@@ -81,6 +82,7 @@ if __name__ == '__main__':
 
     rospy.init_node("spawn_pedsim_agents")
     immortal_pedestrians = rospy.get_param("/spawn_pedsim_agents/immortal_peds")
+    actor_limit = rospy.get_param("/spawn_pedsim_agents/actor_limit")
 
     rospack1 = RosPack()
     pkg_path = rospack1.get_path('pedsim_gazebo_plugin')

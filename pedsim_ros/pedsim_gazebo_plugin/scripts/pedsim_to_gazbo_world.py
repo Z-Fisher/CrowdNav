@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
     # genrate gazebo wolrd 
     generate_gzb_world( pedsim_file_name )     
-    # generate_launch_file( pedsim_file_name ) 
+    generate_launch_file( pedsim_file_name ) 
     print ">> after you launch the scenario using pedsim_simulator, launch the generated world using: "
     print " \" $roslaunch pedsim_gazebo_plugin {}.launch\"  ".format( pedsim_file_name.split('.')[0] )
     
