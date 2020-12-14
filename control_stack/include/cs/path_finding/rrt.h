@@ -109,15 +109,17 @@ class RRT : public PathFinder {
     
     util::Pose local_waypoint =
       get_local_path_pose_(current_pose, global_waypoint, goal_pose, path);
-    const util::Twist command = motion_planner.DriveToPose(
+    util::Twist command = motion_planner.DriveToPose(
       dynamic_features, local_waypoint);
     Eigen::Vector2f new_vel;
     new_vel[0] = command.tra.x();
     new_vel[1] = command.tra.y();
-    //ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
+      //  ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
     vel = new_vel;
-    path.SetV0(util::Twist(command));
+    // path.SetV0(util::Twist(command));
+    path.v0 = command;
 
+    // ROS_ERROR("path vel x: %f, vel y: %f", path.v0.tra.x(), path.v0.tra.y());
     // ROS_INFO("\nNew Loop");
 
     float prob_no_collision = 1;
@@ -239,6 +241,7 @@ class RRT : public PathFinder {
     (void) goal;
     (void) ped_detector;
     paths_.clear();
+     ROS_ERROR("paths_ size after clear: %i", (int) paths_.size());
 
     // Samples paths around the clock based on number of samples
     for (int i = 0; i < params::CONFIG_num_samples; i++) {
@@ -248,16 +251,24 @@ class RRT : public PathFinder {
       Path2f path;
       path.waypoints.push_back(start);
       path.waypoints.push_back(start + sample);
-
+      ROS_ERROR("Path vel before: x: %f, y: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.cost);
       calculate_cost_(path, ped_detector, dynamic_features, motion_planner, start, goal, est_vel,
         current_pose, goal_pose);
+      ROS_ERROR("Path vel after: x: %f, y: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.cost);
+      ROS_ERROR("paths_ size before: %i", (int) paths_.size());
       paths_.push_back(path);
+      ROS_ERROR("paths_ size after: %i", (int) paths_.size());
+      ROS_ERROR("Last path_ element vel: x: %f, y: %f, cost: %f", paths_.back().v0.tra.x(), paths_.back().v0.tra.y(),paths_.back().cost);
       // ROS_ERROR("Path: i: %i, x: %f, y: %f, dist: %f, p_collision: %f, cost: %f", 
       // i, path.waypoints[1].x(), path.waypoints[1].y(), path.dist_from_goal, path.collision_prob, path.cost);
     }
 
 
     // Find the minimum cost path
+    ROS_ERROR("PRINTING PATHS");
+    for (auto path: paths_) {
+      ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.cost);
+    }
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
                                 [](const Path2f& a, const Path2f& b){
       return a.cost < b.cost;
