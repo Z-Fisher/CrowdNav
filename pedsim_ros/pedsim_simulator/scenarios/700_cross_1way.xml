@@ -4,10 +4,10 @@
 
   <!--Robot Waypoints-->
   <waypoint id="robot_goal" x="15" y="15" r="1" b="4"/>
-  <waypoint id="robot_start" x="15" y="-5" r="1" b="3"/>
+  <waypoint id="robot_start" x="-5" y="15" r="1" b="3"/>
 
   <!--Robot-->
-  <agent x="15" y="5" n="1" dx="0" dy="0" type="2">
+  <agent x="-5" y="15" n="1" dx="0" dy="0" type="2">
       <addwaypoint id="robot_start"/>
       <addwaypoint id="robot_goal"/>
   </agent>
@@ -15,7 +15,7 @@
 
 
   <!-- Kill Zone -->
-  <waypoint id="ped_kill" x="27" y="5" r="2" b="2"/>
+  <waypoint id="ped_kill" x="5" y="27" r="2" b="2"/>
 
   <!--AgentClusters-->
   <!-- x,y: spawn position
@@ -23,11 +23,11 @@
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
      
-  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+  <source x="5" y="2" n="1" dx="3" dy="3" type="1">
     <addwaypoint id="ped_kill"/>
   </source>
 
-  <source x="2" y="5" n="1" dx="3" dy="3" type="1">
+  <source x="5" y="2" n="1" dx="3" dy="3" type="1">
     <addwaypoint id="ped_kill"/>
   </source>
 

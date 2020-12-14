@@ -95,8 +95,8 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.32; -- Radians used to be 0.1.
-  rotation_p = 0.95; 
+  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  -- .32
+  rotation_p = 0.1; --0.95
   rotation_i = 0.0;
   translation_p = 0.5;
   stop_past_goal_threshold = 0.75;

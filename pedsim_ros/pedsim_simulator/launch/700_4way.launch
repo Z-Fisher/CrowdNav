@@ -8,23 +8,26 @@
 
 
   <!-- Robot args -->
-  <arg name="robot_x_pos" default="12.0"/>
-  <arg name="robot_y_pos" default="5.0"/>
+  <arg name="robot_x_pos" default="5.0"/>
+  <arg name="robot_y_pos" default="20.0"/>
   <arg name="goal_threshold" default="0.5"/>
 
   <!-- Pedestrian args -->
-  <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
+  <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
+  <arg name="actor_limit" default="70"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
-  <arg name="loc" default ="700_static"/>
+  <arg name="loc" default ="700_4way"/>
   <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/$(arg loc).xml"/>
   <arg name="rviz_config_path" default="$(find pedsim_simulator)/rviz/700.rviz"/>
   <arg name="gazebo_map_path" default="$(find pedsim_gazebo_plugin)/worlds/$(arg loc).world"/>
   <arg name="nav_config_path" default="$(find control_stack)/config/nav_config_$(arg loc).lua"/>
 
   <!-- Simulator args -->
-  <arg name="simulation_factor" default="2.0"/> <!-- Speed up -->
+  <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
+  <arg name="node_start_delay" default="15.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
+
 
 
   <!-- **************************************************************************** -->
@@ -43,7 +46,7 @@
     <arg name="enable_groups" value="true"/>
     <arg name="pose_initial_x" value="$(arg robot_x_pos)"/>
     <arg name="pose_initial_y" value="$(arg robot_y_pos)"/>
-    <arg name="pose_initial_theta" value="0.0"/>
+    <arg name="pose_initial_theta" value="0"/>
   </include>
 
   <!-- Pedsim Visualizer -->
@@ -60,6 +63,7 @@
   <!-- Gazebo Updates (this node spawn pedsim actors to gazebo once, then the plugin updates their pose) -->  
   <node pkg="pedsim_gazebo_plugin" type="spawn_pedsim_agents.py" name="spawn_pedsim_agents" output="screen">
     <param name="immortal_peds" value="$(arg immortal_peds)"/>
+    <param name="actor_limit" value="$(arg actor_limit)"/>
   </node>
 
   <!-- Robot Constructor -->
@@ -74,12 +78,12 @@
   <include file="$(find obstacle_detector)/launch/nodes.launch"/>
 
   <!-- Robot Navigation -->
-  <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true"> <!--output="screen"-->
+  <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "> <!--output="screen"-->
     <param name="config_file_path" value="$(arg nav_config_path)"/>
   </node>
 
   <!-- Performance Metrics -->
-  <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen">
+  <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
     <param name="goal_threshold" value="$(arg goal_threshold)"/>
   </node>
 

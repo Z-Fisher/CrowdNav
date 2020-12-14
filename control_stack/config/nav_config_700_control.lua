@@ -43,8 +43,8 @@ pf = {
 
   -- *********************************************
   map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
-  goal_poses = {{15,25,0}};
-  start_pose = {15,5,0};
+  goal_poses = {{25,15,0}};
+  start_pose = {5,15,0};
   -- *********************************************
 
   kRobotRadius = 0.1;
@@ -95,10 +95,10 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.32; -- Radians used to be 0.1.
-  rotation_p = 0.95; 
+  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  -- .32
+  rotation_p = 0.1; --0.95
   rotation_i = 0.0;
-  translation_p = 0.5;
+  translation_p = 0.5; -- 0.5
   stop_past_goal_threshold = 0.75;
   stop_past_goal_dampener = 5;
   goal_deadzone_tra = 0.3; -- Meters.

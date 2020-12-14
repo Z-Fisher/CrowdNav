@@ -8,11 +8,11 @@
     <obstacle x1="29.5" y1="29.5" x2="29.5" y2="-0.5"/>
 
   <!--Waypoints (incl. WaitingQueues)-->
-  <waypoint id="robot_goal" x="15" y="25" r="1" b="4"/>
-  <waypoint id="robot_start" x="15" y="5" r="1" b="3"/>
+  <waypoint id="robot_goal" x="25" y="15" r="1" b="4"/>
+  <waypoint id="robot_start" x="5" y="15" r="1" b="3"/>
 
   <!--Robot-->
-  <agent x="15" y="5" n="1" dx="0" dy="0" type="2">
+  <agent x="5" y="15" n="1" dx="0" dy="0" type="2">
       <addwaypoint id="robot_start"/>
       <addwaypoint id="robot_goal"/>
   </agent>
