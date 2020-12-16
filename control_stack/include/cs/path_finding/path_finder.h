@@ -45,21 +45,24 @@ struct Path {
   double dist_from_goal;
   float collision_prob;
   util::Twist v0;
+  int index;
 
-  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0), v0(util::Twist(-1, -1, 0)) {}
+  Path() : waypoints(), cost(0), dist_from_goal(INFINITY), collision_prob(0), v0(util::Twist(0, 0, 0)), index(-1) {}
   Path(const std::vector<Position>& waypoints, const Cost& cost, const double dist_from_goal)
-      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal), v0(util::Twist(-1, -1, 0)) {}
+      : waypoints(waypoints), cost(cost), dist_from_goal(dist_from_goal), v0(util::Twist(0, 0, 0)), index(-1) {}
 
-  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal), v0(util::Twist(-1, -1, 0)) {}
-  Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)), v0(util::Twist(-1, -1, 0)) {}
+  Path(const Path& p) : waypoints(p.waypoints), cost(p.cost), dist_from_goal(p.dist_from_goal), v0(util::Twist(p.v0)), index(p.index) {}
+  Path(Path&& p) : waypoints(std::move(p.waypoints)), cost(std::move(p.cost)), v0(util::Twist(p.v0)), index(std::move(p.index)) {}
   Path& operator=(const Path& p) {
     this->waypoints = p.waypoints;
     this->cost = p.cost;
+    this->index = p.index;
     return *this;
   }
   Path& operator=(Path&& p) {
     this->waypoints = std::move(p.waypoints);
     this->cost = std::move(p.cost);
+    this->index = std::move(p.index);
     return *this;
   }
 

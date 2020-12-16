@@ -41,7 +41,7 @@ CONFIG_INT(num_drawn_candidates, "rrt.num_paths_visualized");
 CONFIG_STRING(map_tf_frame, "frames.map_tf_frame");
 CONFIG_STRING(base_link_tf_frame, "frames.base_tf_frame");
 CONFIG_STRING(laser_tf_frame, "frames.laser_tf_frame");
-
+CONFIG_INT(cycles_until_refresh, "rrt.cycles_until_refresh");
 CONFIG_VECTOR3FLIST(goal_poses, "pf.goal_poses");
 
 }  // namespace params
@@ -163,31 +163,36 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
   //   return {ControllerType::ESCAPE_COLLISION, {}};
   // }
 
-  RefreshGoal();
+  static util::Pose local_waypoint;
+  static int cycle_num = 0;
+  if (cycle_num == params::CONFIG_cycles_until_refresh) { 
+    RefreshGoal();
 
-  global_path_finder_.PlanPath(est_pose.tra, current_goal_.tra);
-  const auto global_path = global_path_finder_.GetPath();
-  DrawPath(dpw_, global_path, "global_path", 0);
-  const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
-      est_pose, global_path, laser_points_wf, total_margin);
-  const auto local_path = local_path_finder_.FindPath(
-      ped_detector_, obstacle_detector_.GetDynamicFeatures(), motion_planner_, est_pose.tra, global_waypoint, est_vel.tra,
-      est_pose, current_goal_);
-  util::Pose local_waypoint =
-      GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
-  DrawPath(dpw_, local_path, "local_path", 2);
-  const auto candidates = local_path_finder_.GetCandidatePaths(
-    params::CONFIG_num_drawn_candidates);
-  for (int i = 0; i < (int)candidates.size(); i++) {
-    DrawPath(dpw_, candidates[i], "candidate_path" + std::to_string(i), 1);
+    global_path_finder_.PlanPath(est_pose.tra, current_goal_.tra);
+    const auto global_path = global_path_finder_.GetPath();
+    DrawPath(dpw_, global_path, "global_path", 0);
+    const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
+        est_pose, global_path, laser_points_wf, total_margin);
+    const auto local_path = local_path_finder_.FindPath(
+        ped_detector_, obstacle_detector_.GetDynamicFeatures(), motion_planner_, est_pose.tra, global_waypoint, est_vel.tra,
+        est_pose, current_goal_);
+    local_waypoint = GetLocalPathPose(est_pose, global_waypoint, current_goal_, local_path);
+    DrawPath(dpw_, local_path, "local_path", 2);
+    const auto candidates = local_path_finder_.GetCandidatePaths(
+      params::CONFIG_num_drawn_candidates);
+    for (int i = 0; i < (int)candidates.size(); i++) {
+      DrawPath(dpw_, candidates[i], "candidate_path" + std::to_string(i), 1);
+    }
+    if (local_path.waypoints.empty()) {
+      ROS_INFO("Local path planner failed.");
+    }
+    DrawGoal(dpw_, local_waypoint);
+    cycle_num = 0;
   }
-  if (local_path.waypoints.empty()) {
-    ROS_INFO("Local path planner failed.");
-  }
-
-  DrawGoal(dpw_, local_waypoint);
+  cycle_num++;
   const util::Twist command = motion_planner_.DriveToPose(
       obstacle_detector_.GetDynamicFeatures(), local_waypoint);
+
 
   return {ControllerType::NAVIGATION, command};
 }
