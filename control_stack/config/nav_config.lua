@@ -132,4 +132,5 @@ rrt = {
   t_horizon = 5;
   cycles_until_refresh = 5;
   switch_discount = .97; -- percentage cost discount on switching
+  y_vel_scale = 0.5;
 }

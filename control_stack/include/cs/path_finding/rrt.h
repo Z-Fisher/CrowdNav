@@ -58,6 +58,8 @@ CONFIG_FLOAT(collision_buffer, "rrt.collision_buffer");
 CONFIG_FLOAT(t_horizon, "rrt.t_horizon");
 CONFIG_FLOAT(switch_discount, "rrt.switch_discount");
 
+CONFIG_FLOAT(y_vel_scale, "rrt.y_vel_scale");
+
 }  // namespace params
 
 template <int max_samples>
@@ -114,7 +116,8 @@ class RRT : public PathFinder {
       dynamic_features, local_waypoint);
     Eigen::Vector2f new_vel;
     new_vel[0] = command.tra.x();
-    new_vel[1] = command.tra.y();
+    float y_diff = path.waypoints.back().tra.y() - path.waypoints.front.tra().y();
+    new_vel[1] = params::CONFIG_y_vel_scale * y_diff * commanda.tra.x();
       //  ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
     vel = new_vel;
     // path.SetV0(util::Twist(command));
