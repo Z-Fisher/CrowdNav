@@ -116,11 +116,10 @@ class RRT : public PathFinder {
       dynamic_features, local_waypoint);
     Eigen::Vector2f new_vel;
     new_vel[0] = command.tra.x();
-    float y_diff = path.waypoints.back().tra.y() - path.waypoints.front.tra().y();
-    new_vel[1] = params::CONFIG_y_vel_scale * y_diff * commanda.tra.x();
-      //  ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
+    float y_diff = path.waypoints.back().y() - path.waypoints.front().y();
+    new_vel[1] = params::CONFIG_y_vel_scale * y_diff * command.tra.x();
+    // ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
     vel = new_vel;
-    // path.SetV0(util::Twist(command));
     path.v0 = command;
 
     // ROS_ERROR("path vel x: %f, vel y: %f", path.v0.tra.x(), path.v0.tra.y());
@@ -180,21 +179,21 @@ class RRT : public PathFinder {
       float p_y = cdf_hi_y - cdf_lo_y;
       float prob_single_collision = p_x * p_y;
 
-      // if (abs(ped.pose.tra.x()) < 2 && abs(ped.pose.tra.y()) < 2) {
-      //   ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
-      //     ped.pose.tra.x(), 
-      //     ped.pose.tra.y(), 
-      //     start.x(), 
-      //     start.y(),
-      //     ped.vel.tra.x(),
-      //     ped.vel.tra.y(),
-      //     vel.x(),
-      //     vel.y(),
-      //     t_min,
-      //     sigma,
-      //     collision_radius,
-      //     prob_single_collision);
-      // }
+      if (true) {
+        ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+          ped.pose.tra.x(), 
+          ped.pose.tra.y(), 
+          start.x(), 
+          start.y(),
+          ped.vel.tra.x(),
+          ped.vel.tra.y(),
+          vel.x(),
+          vel.y(),
+          t_min,
+          sigma,
+          collision_radius,
+          prob_single_collision);
+      }
       
       prob_no_collision *= (1 - prob_single_collision);
     }
