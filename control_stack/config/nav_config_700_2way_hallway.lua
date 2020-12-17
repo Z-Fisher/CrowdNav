@@ -42,9 +42,9 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_1obst.map";  --"src/CrowdNav/control_stack/maps/empty.map";
-  goal_poses = {{25,12,0}};
-  start_pose = {5,12,0};
+  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  goal_poses = {{25,5,0}};
+  start_pose = {5,5,0};
   -- *********************************************
 
   kRobotRadius = 0.1;
@@ -74,7 +74,6 @@ od = {
   is_wall_threshold = 0.1;
   min_trajectory_rotation = 0.005;
 };
-
 
 limits = {
   kMaxTraAcc = 0.2; -- previously 0.2   --10
@@ -120,7 +119,7 @@ esc_collision = {
 
 rrt = {
   num_samples = 48;
-  cost_bias = 1000.0;
+  cost_bias = 800.0;
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;

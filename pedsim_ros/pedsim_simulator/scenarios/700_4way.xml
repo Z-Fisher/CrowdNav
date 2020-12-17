@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+  <!--Obstacles-->
+  <obstacle x1="15" y1="0" x2="15" y2="15"/>
+  <obstacle x1="15" y1="15" x2="0" y2="15"/>
+  <obstacle x1="0" y1="25" x2="15" y2="25"/>
+  <obstacle x1="15" y1="25" x2="15" y2="40"/>
+  <obstacle x1="25" y1="40" x2="25" y2="25"/>
+  <obstacle x1="25" y1="25" x2="40" y2="25"/>
+  <obstacle x1="40" y1="15" x2="25" y2="15"/>
+  <obstacle x1="25" y1="15" x2="25" y2="0"/>
+
+  <waypoint id="mid" x="20" y="20" r="4" b="1"/>
+
+  <!-- Sink -->
+  <waypoint id="east" x="23" y="2" r="2" b="2"/> 
+  <waypoint id="west" x="17" y="38" r="2" b="2"/> 
+  <waypoint id="north" x="38" y="23" r="2" b="2"/> 
+  <waypoint id="south" x="2" y="17" r="2" b="2"/> 
+
+
+  <waypoint id="robot_goal" x="35" y="20" r="2" b="4"/>
+  <waypoint id="robot_start" x="5" y="20" r="2" b="3"/>
+
+
+  <agent x="0" y="20" n="1" dx="0" dy="0" type="2">
+    <addwaypoint id="robot_start"/>
+    <addwaypoint id="robot_goal"/>
+  </agent>
+
+  <!--AgentClusters-->
+  <!-- bottom -->
+  <!--source x="0" y="20" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="west"/>
+  </source-->
+  <source x="0" y="23" n="1" dx="1" dy="1" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="north"/>
+  </source>
+  <!--source x="0" y="20" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="east"/>
+  </source-->
+
+  <!-- top -->
+  <!--source x="40" y="20" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="west"/>
+  </source-->
+  <source x="40" y="17" n="1" dx="1" dy="1" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="south"/>
+  </source>
+  <!--source x="40" y="20" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="east"/>
+  </source-->
+
+  <!-- right -->
+  <source x="17" y="0" n="1" dx="1" dy="1" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="west"/>
+  </source>
+  <!--source x="20" y="0" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="south"/>
+  </source-->
+  <!--source x="20" y="0" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="north"/>
+  </source-->
+
+  <!-- left -->
+  <!--source x="20" y="40" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="north"/>
+  </source-->
+  <!--source x="20" y="40" n="1" dx="3" dy="5" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="south"/>
+  </source-->
+  <source x="23" y="40" n="1" dx="1" dy="1" type="0">
+    <addwaypoint id="mid"/>
+    <addwaypoint id="east"/>
+  </source>
+
+</scenario>
