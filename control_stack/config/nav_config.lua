@@ -121,15 +121,15 @@ esc_collision = {
 
 rrt = {
   num_samples = 48;  --VIDEOS: 24, 48 was 48 before
-  cost_bias = 5000;  --800 vs 1000 - higher number mean less likely to collide
-  path_length = 3.0;
+  cost_bias = 10000000;  --800 vs 1000 - higher number mean less likely to collide
+  path_length = 5.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
-  ped_var_scale = 0.5;
-  ped_var_power = 1;
+  ped_var_scale = 1;
+  ped_var_power = 2;
   robot_radius = 0.35;
   collision_buffer = 0;
-  t_horizon = 5;
-  cycles_until_refresh = 5;
-  switch_discount = .97; -- percentage cost discount on switching
+  t_horizon = 10;
+  cycles_until_refresh = 50;
+  switch_discount = 1; -- percentage cost discount on switching
 }

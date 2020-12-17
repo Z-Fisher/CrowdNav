@@ -97,6 +97,9 @@ util::Twist PIDController::DriveToPose(
 
   const auto limited_command = ApplyCommandLimits(proposed_command);
 
+  // TODO: testing this out take it out later if it doesnt work
+  return limited_command;
+  
   const auto limited_command_res =
       IsCommandColliding(limited_command, dynamic_features);
   if (!limited_command_res.first) {
@@ -216,7 +219,7 @@ util::Twist PIDController::ProposeCommand(const util::Pose& waypoint) const {
   ROS_INFO("L2 Norm to Goal: %f", x);
 
   util::Twist proposed_command(
-      x * params::CONFIG_translation_p,
+      !turning * (x * params::CONFIG_translation_p),
       0,
       turning * (-robot_to_waypoint_angle_delta * params::CONFIG_rotation_p));
 
