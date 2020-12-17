@@ -349,6 +349,7 @@ class StateMachine {
     obstacle_detector_.UpdateObservation(
         est_pose, laser_, &(dpw_->detected_walls_pub_));
     const util::Twist command = controller_list_.Execute();
+    // ROS_ERROR("Actual velocity: vx = %f, vy = %f", command.tra.x(), command.tra.y());
     state_estimator_->UpdateLastCommand(command);
     PublishTransforms();
     state_estimator_->Visualize(&(dpw_->particle_pub_));
