@@ -14,7 +14,7 @@
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="True"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
-  <arg name="actor_limit" default="0"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
+  <arg name="actor_limit" default="25"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
 
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->

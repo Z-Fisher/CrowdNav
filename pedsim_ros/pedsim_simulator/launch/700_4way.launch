@@ -14,7 +14,7 @@
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
-  <arg name="actor_limit" default="70"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
+  <arg name="actor_limit" default="95"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
 
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
   <arg name="loc" default ="700_4way"/>
@@ -26,7 +26,7 @@
   <!-- Simulator args -->
   <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
-  <arg name="node_start_delay" default="15.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
+  <arg name="node_start_delay" default="70.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
 
 
 
