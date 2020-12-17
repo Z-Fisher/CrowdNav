@@ -11,8 +11,8 @@
   <!-- <waypoint id="bookshop_entry" x="25" y="5" r="5"/>
   <waypoint id="bookshop_exit" x="25" y="25" r="5"/> -->
 
-    <waypoint id="bookshop_entry" x="28" y="28" r="5"/>
-  <waypoint id="bookshop_exit" x="2" y="2" r="5"/>
+    <waypoint id="bookshop_entry" x="8" y="22" r="5"/>
+  <waypoint id="bookshop_exit" x="22" y="8" r="5"/>
 
   <waypoint id="coffee_entry" x="5" y="25" r="5"/>
   <waypoint id="coffee_exit" x="5" y="5" r="5"/>
@@ -29,7 +29,7 @@
         <addwaypoint id="robot_goal"/>
     </agent>
     <!--AgentClusters-->
-     <agent x="24" y="24" n="8" dx="3" dy="3" type="0">
+     <agent x="8" y="22" n="10" dx="3" dy="3" type="0">
         <addwaypoint id="bookshop_entry"/>
         <addwaypoint id="bookshop_exit"/>
     </agent>

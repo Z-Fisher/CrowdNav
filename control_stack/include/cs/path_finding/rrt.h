@@ -179,21 +179,21 @@ class RRT : public PathFinder {
       float p_y = cdf_hi_y - cdf_lo_y;
       float prob_single_collision = p_x * p_y;
 
-      if (true) {
-        ROS_INFO("pedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
-          ped.pose.tra.x(), 
-          ped.pose.tra.y(), 
-          start.x(), 
-          start.y(),
-          ped.vel.tra.x(),
-          ped.vel.tra.y(),
-          vel.x(),
-          vel.y(),
-          t_min,
-          sigma,
-          collision_radius,
-          prob_single_collision);
-      }
+      // if (true) {
+      //   ROS_ERROR("\n\npedx: %f, pedy: %f, robx: %f, roby: %f, pedvx: %f, pedvy: %f, robvx: %f, robvy: %f, t_min: %f, sigma: %f, coll_rad: %f,  p_coll: %f", 
+      //     ped.pose.tra.x(), 
+      //     ped.pose.tra.y(), 
+      //     start.x(), 
+      //     start.y(),
+      //     ped.vel.tra.x(),
+      //     ped.vel.tra.y(),
+      //     vel.x(),
+      //     vel.y(),
+      //     t_min,
+      //     sigma,
+      //     collision_radius,
+      //     prob_single_collision);
+      // }
       
       prob_no_collision *= (1 - prob_single_collision);
     }
@@ -222,6 +222,7 @@ class RRT : public PathFinder {
       path.collision_prob = collision_prob;
       path.dist_from_goal = dist_from_goal;
       path.cost  = cost;
+      ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.dist_from_goal, path.collision_prob, path.cost);
 
   }
  public:
@@ -268,7 +269,7 @@ class RRT : public PathFinder {
     // Find the minimum cost path
     // ROS_ERROR("PRINTING PATHS");
     // for (auto path: paths_) {
-    //   ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.cost);
+    //   ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.dist_from_goal, path.collision_prob, path.cost);
     // }
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
                                 [](const Path2f& a, const Path2f& b){

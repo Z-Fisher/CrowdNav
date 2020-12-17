@@ -96,6 +96,7 @@ util::Twist PIDController::DriveToPose(
   ROS_INFO("Proposed command: %f, %f", proposed_command.tra.x(), proposed_command.tra.y());
 
   const auto limited_command = ApplyCommandLimits(proposed_command);
+  return limited_command;
 
   const auto limited_command_res =
       IsCommandColliding(limited_command, dynamic_features);
