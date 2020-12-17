@@ -16,7 +16,6 @@
   <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
   <arg name="actor_limit" default="25"/>  <!-- Max number of peds allowed in environment before oldest begin to be killed -->
 
-
   <!-- Map file args: just need to change "loc" if using consistant naming convention -->
   <arg name="loc" default ="700_along_1way"/>
   <arg name="pedsim_map_path" default="$(find pedsim_simulator)scenarios/$(arg loc).xml"/>

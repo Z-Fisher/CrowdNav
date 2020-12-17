@@ -27,7 +27,7 @@
   <!-- Simulator args -->
   <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
-  <arg name="node_start_delay" default="10.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
+  <arg name="node_start_delay" default="25.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
 
 
 
