@@ -27,8 +27,5 @@
     <addwaypoint id="ped_kill"/>
   </source>
 
-  <source x="5" y="2" n="1" dx="3" dy="3" type="1">
-    <addwaypoint id="ped_kill"/>
-  </source>
 
 </scenario>

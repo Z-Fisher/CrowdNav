@@ -21,8 +21,8 @@
 
 
   <!-- Kill Zone -->
-  <waypoint id="ped_kill_A" x="29" y="3.5" r="2" b="2"/>
-  <waypoint id="ped_kill_B" x="2" y="6.5" r="2" b="2"/>
+  <waypoint id="ped_kill_A" x="29.5" y="3.5" r="2" b="2"/>
+  <waypoint id="ped_kill_B" x="1.5" y="6.5" r="2" b="2"/>
   
 
   <!--AgentClusters-->
@@ -31,7 +31,7 @@
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
 
-  <source x="27" y="6.5" n="1" dx="2" dy="2" type="1">
+  <source x="29" y="6.5" n="1" dx="2" dy="2" type="1">
     <addwaypoint id="ped_kill_B"/>
   </source>
 
