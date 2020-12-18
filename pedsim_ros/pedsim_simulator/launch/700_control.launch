@@ -27,6 +27,8 @@
   <!-- Simulator args -->
   <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
+  <arg name="node_start_delay" default="2.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
+
 
 
   <!-- **************************************************************************** -->
@@ -77,12 +79,12 @@
   <include file="$(find obstacle_detector)/launch/nodes.launch"/>
 
   <!-- Robot Navigation -->
-  <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true"> <!--output="screen"-->
+  <node name="nav_node" pkg="control_stack" type="nav_node" respawn="true" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' "> <!--output="screen"-->
     <param name="config_file_path" value="$(arg nav_config_path)"/>
   </node>
 
   <!-- Performance Metrics -->
-  <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen">
+  <node name="analytics_node" pkg="analytics" type="analytics_node" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' ">
     <param name="goal_threshold" value="$(arg goal_threshold)"/>
   </node>
 

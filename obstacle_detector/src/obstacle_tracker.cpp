@@ -71,7 +71,7 @@ bool ObstacleTracker::updateParams(std_srvs::Empty::Request &req, std_srvs::Empt
 
   nh_local_.param<double>("loop_rate", p_loop_rate_, 100.0);
   p_sampling_time_ = 1.0 / p_loop_rate_;
-  p_sensor_rate_ = 10.0;    // 10 Hz for Hokuyo
+  p_sensor_rate_ = 100.0;    // 10 Hz for Hokuyo
 
   nh_local_.param<double>("tracking_duration", p_tracking_duration_, 2.0);
   nh_local_.param<double>("min_correspondence_cost", p_min_correspondence_cost_, 0.3);

@@ -42,7 +42,7 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/empty.map";  --"src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{25,15,0}};
   start_pose = {5,15,0};
   -- *********************************************
@@ -117,9 +117,74 @@ esc_collision = {
   num_safety_margins = 2;
 };
 
+frames = {
+  laser_tf_frame = "/laser";
+  base_tf_frame = "/base_footprint"; --"/base_link";
+  map_tf_frame = "/map";
+};
+
+od = {
+  kMinDistanceThreshold = 0.05;
+  kDistanceFromMax = 0.1;
+  kProposedTranslationStdDev = 1.0;
+  kProposedRotationStdDev = 5;
+  command_bias = 0.9;
+  kThresholdRotateInPlace = 0.9;
+  kTranslationCostScaleFactor = 1000;
+  clustering = {
+    max_dist_between_readings = 0.05;
+    min_distance_btw_readings_to_reason_angle = 0.01;
+    line_similarity = math.cos(math.rad(20));
+  };
+  is_wall_threshold = 0.1;
+  min_trajectory_rotation = 0.005;
+};
+
+limits = {
+  kMaxTraAcc = 0.2; -- previously 0.2   --2
+  kMaxTraVel = 1; -- previously 1    --10
+  kMaxRotAcc = 2.5; -- previously 2.5  --25
+  kMaxRotVel = 1; -- previously 1    --10
+};
+
+safety = {
+  decelerate_scaler = 0.75;
+};
+
+path_finding = {
+  goal_delta_change = 0.8; -- Meters
+  switch_historesis_threshold = 0.4; -- Meters
+  max_distance_off_path = 0.2; -- Meters
+  local_robot_inflation = 1.1;
+  global_robot_inflation = 1.5;
+};
+
+control = {
+  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  VIDEOS: -0.32, 0.75
+  rotation_p = 0.1; 
+  rotation_i = 0.0;
+  translation_p = 0.5;
+  stop_past_goal_threshold = 0.75;
+  stop_past_goal_dampener = 5;
+  goal_deadzone_tra = 0.3; -- Meters.
+  goal_deadzone_rot = 0.2; -- Radians.
+};
+
+cmd_scaler = {
+  command_scaler = "turtlebot";
+  rotation_zero_threshold = 0.01;
+  rotation_min_effect_threshold = 0.4;
+  rotation_translation_scaler = 1.9;
+  rotation_translation_exponent = 2.8;
+};
+
+esc_collision = {
+  num_safety_margins = 2;
+};
+
 rrt = {
-  num_samples = 48;
-  cost_bias = 1000.0;
+  num_samples = 24;  --VIDEOS: 24, 48 was 48 before
+  cost_bias = 500;  --800 vs 1000 - higher number mean less likely to collide
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
@@ -128,4 +193,7 @@ rrt = {
   robot_radius = 0.35;
   collision_buffer = 0;
   t_horizon = 5;
+  cycles_until_refresh = 50;
+  switch_discount = .95; -- percentage cost discount on switching
+  y_vel_scale = .1;
 }

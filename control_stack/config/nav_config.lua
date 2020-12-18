@@ -42,9 +42,9 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  --map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/empty.map";
   --map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
-  map = "/home/ray/Projects/crowd_nav_ws/src/CrowdNav/control_stack/maps/empty.map";
+  --map = "/home/ray/Projects/crowd_nav_ws/src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{24,24,0}};
   start_pose = {10,10,0};
   -- *********************************************

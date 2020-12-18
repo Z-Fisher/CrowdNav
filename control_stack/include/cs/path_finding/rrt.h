@@ -222,7 +222,7 @@ class RRT : public PathFinder {
       path.collision_prob = collision_prob;
       path.dist_from_goal = dist_from_goal;
       path.cost  = cost;
-      ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.dist_from_goal, path.collision_prob, path.cost);
+      //ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.dist_from_goal, path.collision_prob, path.cost);
 
   }
  public:
@@ -242,9 +242,9 @@ class RRT : public PathFinder {
                   const util::Pose& current_pose,
                   const util::Pose& goal_pose) {    
     paths_.clear();
-    ROS_ERROR("goal: %f, %f", goal[0], goal[1]);
-    ROS_ERROR("goal_pose: %f, %f", goal_pose.tra.x(), goal_pose.tra.y());
-    ROS_ERROR("prev path index %d: cost = %f", prev_path_.index, prev_path_.cost);
+    //ROS_ERROR("goal: %f, %f", goal[0], goal[1]);
+    //ROS_ERROR("goal_pose: %f, %f", goal_pose.tra.x(), goal_pose.tra.y());
+    //ROS_ERROR("prev path index %d: cost = %f", prev_path_.index, prev_path_.cost);
     // Samples paths around the clock based on number of samples
     for (int i = 0; i < params::CONFIG_num_samples; i++) {
       float theta = 2 * i * M_PI / params::CONFIG_num_samples;
@@ -281,7 +281,7 @@ class RRT : public PathFinder {
     prev_path_ = min_cost_path;
     // ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
     // ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
-    ROS_ERROR("Predicted velocity: vx = %f, vy = %f", min_cost_path.v0.tra.x(), min_cost_path.v0.tra.y());
+    //ROS_ERROR("Predicted velocity: vx = %f, vy = %f", min_cost_path.v0.tra.x(), min_cost_path.v0.tra.y());
     return min_cost_path;
     //return SmoothPath(start, dynamic_map, path);
   }

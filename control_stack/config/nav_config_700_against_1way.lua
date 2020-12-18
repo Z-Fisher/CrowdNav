@@ -43,7 +43,7 @@ pf = {
 
   -- *********************************************
 
-  map = "/home/zf/Documents/rrt_ws/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{25,5,0}};
   start_pose = {5,5,0};
   -- *********************************************
@@ -77,10 +77,10 @@ od = {
 };
 
 limits = {
-  kMaxTraAcc = 0.2; -- previously 0.2   --10
-  kMaxTraVel = 1; -- previously 1     --50
-  kMaxRotAcc = 2.5; -- previously 2.5   --10
-  kMaxRotVel = 1.0; -- previously 1     --10
+  kMaxTraAcc = 0.2; -- previously 0.2   --2
+  kMaxTraVel = 1; -- previously 1    --10
+  kMaxRotAcc = 2.5; -- previously 2.5  --25
+  kMaxRotVel = 1; -- previously 1    --10
 };
 
 safety = {
@@ -96,8 +96,8 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  -- .32
-  rotation_p = 0.1; --0.95
+  rotation_drive_threshold = 0.1; -- Radians used to be 0.1.  VIDEOS: -0.32, 0.75
+  rotation_p = 0.1; 
   rotation_i = 0.0;
   translation_p = 0.5;
   stop_past_goal_threshold = 0.75;
@@ -119,8 +119,8 @@ esc_collision = {
 };
 
 rrt = {
-  num_samples = 48;
-  cost_bias = 800.0;
+  num_samples = 24;  --VIDEOS: 24, 48 was 48 before
+  cost_bias = 500;  --800 vs 1000 - higher number mean less likely to collide
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
@@ -129,4 +129,7 @@ rrt = {
   robot_radius = 0.35;
   collision_buffer = 0;
   t_horizon = 5;
+  cycles_until_refresh = 50;
+  switch_discount = .95; -- percentage cost discount on switching
+  y_vel_scale = .1;
 }

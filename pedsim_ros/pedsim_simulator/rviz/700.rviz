@@ -160,11 +160,7 @@ Visualization Manager:
       Marker Topic: /robot/robot_path
       Name: Marker
       Namespaces:
-        candidate_path0: true
-        candidate_path1: true
-        candidate_path2: true
-        global_path: true
-        local_path: true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -172,13 +168,13 @@ Visualization Manager:
       Marker Topic: /pedsim_visualizer/waypoints
       Name: MarkerArray
       Namespaces:
-        bookshop_entry: true
-        bookshop_exit: true
-        coffee_entry: true
-        coffee_exit: true
-        info_desk: true
+        east: true
+        mid: true
+        north: true
         robot_goal: true
         robot_start: true
+        south: true
+        west: true
       Queue Size: 100
       Value: true
     - Circles color: 170; 0; 0
@@ -220,25 +216,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 39.503604888916016
+      Distance: 48.70763397216797
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 6.453918933868408
-        Y: 13.057804107666016
+        X: 10.233181953430176
+        Y: 26.45753288269043
         Z: -2.6566034648567438e-5
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.544796347618103
+      Pitch: 1.509796380996704
       Target Frame: <Fixed Frame>
       Value: XYOrbit (rviz)
-      Yaw: 3.1385691165924072
+      Yaw: 3.13856840133667
     Saved: ~
 Window Geometry:
   Displays:
