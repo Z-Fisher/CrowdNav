@@ -118,9 +118,11 @@ class RRT : public PathFinder {
     new_vel[0] = command.tra.x();
     float y_diff = path.waypoints.back().y() - path.waypoints.front().y();
     new_vel[1] = params::CONFIG_y_vel_scale * y_diff * command.tra.x();
+    // ROS_ERROR("\n\ny diff : %f", y_diff);
     // ROS_ERROR("vel x: %f, vel y: %f", command.tra.x(), command.tra.y());
     vel = new_vel;
-    path.v0 = command;
+    path.v0 = util::Twist(vel.x(), vel.y(), command.rot);
+    // ROS_ERROR("\n\nvel  vx %f, vy : %f", vel.x(), vel.y());
 
     // ROS_ERROR("path vel x: %f, vel y: %f", path.v0.tra.x(), path.v0.tra.y());
     // ROS_INFO("\nNew Loop");
@@ -267,21 +269,22 @@ class RRT : public PathFinder {
     }
 
     // Find the minimum cost path
-    // ROS_ERROR("PRINTING PATHS");
-    // for (auto path: paths_) {
-    //   ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path.v0.tra.x(), path.v0.tra.y(), path.dist_from_goal, path.collision_prob, path.cost);
-    // }
+    ROS_ERROR("\n\nPRINTING PATHS");
+    for (Path2f& path_: paths_) {
+      ROS_ERROR("Path in paths_ : vel  x: %f, y: %f, euclid: %f, collision_prob: %f, cost: %f", path_.v0.tra.x(), path_.v0.tra.y(), path_.dist_from_goal, path_.collision_prob, path_.cost);
+    }
     Path2f min_cost_path = *std::min_element(begin(paths_), end(paths_),
                                 [](const Path2f& a, const Path2f& b){
       return a.cost < b.cost;
     });
+
     // ROS_INFO("start: %f, %f", start[0], start[1]);
     // ROS_INFO("Path waypoint size: %i", (int) paths_.size());
 
     prev_path_ = min_cost_path;
     // ROS_INFO("Path Start: x: %f, y: %f", min_cost_path.waypoints[0][0], min_cost_path.waypoints[0][1]);
     // ROS_INFO("Path End: x: %f, y: %f", min_cost_path.waypoints[1][0], min_cost_path.waypoints[1][1]);
-    //ROS_ERROR("Predicted velocity: vx = %f, vy = %f", min_cost_path.v0.tra.x(), min_cost_path.v0.tra.y());
+    ROS_ERROR("\n\nMin path velocity: vx = %f, vy = %f collision_prob: %f, cost: %f", min_cost_path.v0.tra.x(), min_cost_path.v0.tra.y(), min_cost_path.collision_prob, min_cost_path.cost);
     return min_cost_path;
     //return SmoothPath(start, dynamic_map, path);
   }

@@ -10,7 +10,7 @@
   <!-- Robot args -->
   <arg name="robot_x_pos" default="5.0"/>
   <arg name="robot_y_pos" default="20.0"/>
-  <arg name="goal_threshold" default="0.5"/>
+  <arg name="goal_threshold" default="2"/>
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->
@@ -26,7 +26,7 @@
   <!-- Simulator args -->
   <arg name="simulation_factor" default="1.0"/> <!-- Speed up -->
   <arg name="update_rate" default="25.0"/> <!-- Hz -->
-  <arg name="node_start_delay" default="70.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
+  <arg name="node_start_delay" default="10.0"/>  <!-- (s) delay that lets the pedestrians overtake the robot before running experiment -->
 
 
 

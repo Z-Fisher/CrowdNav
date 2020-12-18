@@ -42,7 +42,8 @@ pf = {
   kTemporalConsistencyWeight = 0;
 
   -- *********************************************
-  map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
+  -- map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/700_against_1way.map";  --"src/CrowdNav/control_stack/maps/empty.map";
   goal_poses = {{25,5,0}};
   start_pose = {5,5,0};
   -- *********************************************
@@ -119,7 +120,7 @@ esc_collision = {
 
 rrt = {
   num_samples = 24;  --VIDEOS: 24, 48 was 48 before
-  cost_bias = 500;  --800 vs 1000 - higher number mean less likely to collide
+  cost_bias = 5000;  --800 vs 1000 - higher number mean less likely to collide
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
@@ -128,7 +129,7 @@ rrt = {
   robot_radius = 0.35;
   collision_buffer = 0;
   t_horizon = 5;
-  cycles_until_refresh = 50;
+  cycles_until_refresh = 10;
   switch_discount = .95; -- percentage cost discount on switching
   y_vel_scale = .1;
 }

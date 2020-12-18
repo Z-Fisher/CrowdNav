@@ -234,7 +234,8 @@ class AStar : public PathFinder {
                   const Eigen::Vector2f& start,
                   const Eigen::Vector2f& goal) {
     if (!IsLineColliding(dynamic_map, start, goal)) {
-      return {{start, goal}, (goal - start).norm(), (goal - start).norm()};
+      return Path2f();
+      // return {{start, goal}, (float) (goal - start).norm(), (goal - start).norm(), 0,  util::Twist(0,0,0), 0};
     }
     if (prev_path_.IsValid() && prev_path_.waypoints.back() == goal &&
         !IsPathColliding(dynamic_map, prev_path_)) {

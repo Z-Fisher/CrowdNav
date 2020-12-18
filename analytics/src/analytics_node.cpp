@@ -90,6 +90,7 @@ void goal_cb(const visualization_msgs::MarkerArray& msg) {
     if (first_goal) {
         for (int i=0; i<1000; i++) {
             if (msg.markers[i].ns == "robot_goal") {
+                // ROS_ERROR("UPDATING GOALS");
                 goal_x = msg.markers[i].pose.position.x;
                 goal_y = msg.markers[i].pose.position.y;
                 first_goal = false;
@@ -130,6 +131,8 @@ int main(int argc, char **argv) {
     ros::Rate rate(30.0);
     while (ros::ok()) {
         ros::spinOnce();
+
+        // ROS_ERROR("Dist to goal: %f, goal threshold: %f", dist_to_goal, goal_threshold);
 
         //ROS_INFO("goal: %f, %f",goal_x, goal_y);
         
