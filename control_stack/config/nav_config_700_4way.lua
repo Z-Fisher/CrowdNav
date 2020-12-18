@@ -43,7 +43,7 @@ pf = {
 
   -- *********************************************
   -- map = "/home/zf/Documents/final/src/CrowdNav/control_stack/maps/700_4way.map";
-  map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/empty.map";
+  map = "/home/sebastian/catkin_ws/src/CrowdNav/control_stack/maps/700_4way.map";
   goal_poses = {{35,20,0}};
   start_pose = {5,20,0};
   -- *********************************************
@@ -118,24 +118,8 @@ esc_collision = {
   num_safety_margins = 2;
 };
 
-rrt = {
-  num_samples = 8;  --VIDEOS: 24, 48 was 48 before
-  cost_bias = 100;  --800 vs 1000 - higher number mean less likely to collide
-  path_length = 3.0;
-  num_paths_visualized = 4;
-  ped_var_bias = 0.707;
-  ped_var_scale = 0.5;
-  ped_var_power = 1;
-  robot_radius = 0.35;
-  collision_buffer = 0;
-  t_horizon = 5;
-  cycles_until_refresh = 5;
-  switch_discount = .95; -- percentage cost discount on switching
-  y_vel_scale = .25;
-}
-
 -- rrt = {
---   num_samples = 24;  --VIDEOS: 24, 48 was 48 before
+--   num_samples = 8;  --VIDEOS: 24, 48 was 48 before
 --   cost_bias = 100;  --800 vs 1000 - higher number mean less likely to collide
 --   path_length = 3.0;
 --   num_paths_visualized = 4;
@@ -146,6 +130,22 @@ rrt = {
 --   collision_buffer = 0;
 --   t_horizon = 5;
 --   cycles_until_refresh = 5;
---   switch_discount = 1; -- percentage cost discount on switching
+--   switch_discount = .95; -- percentage cost discount on switching
 --   y_vel_scale = .25;
 -- }
+
+rrt = {
+  num_samples = 24;  --VIDEOS: 24, 48 was 48 before
+  cost_bias = 200;  --800 vs 1000 - higher number mean less likely to collide
+  path_length = 3.0;
+  num_paths_visualized = 4;
+  ped_var_bias = 0.707;
+  ped_var_scale = 0.5;
+  ped_var_power = 1;
+  robot_radius = 0.35;
+  collision_buffer = 0;
+  t_horizon = 5;
+  cycles_until_refresh = 5;
+  switch_discount = 1; -- percentage cost discount on switching
+  y_vel_scale = .25;
+}
