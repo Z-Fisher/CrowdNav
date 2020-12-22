@@ -55,6 +55,8 @@ CONFIG_FLOAT(safety_margin, "pf.kSafetyMargin");
 
 CONFIG_FLOAT(translational_cost_scale_factor, "od.kTranslationCostScaleFactor");
 
+CONFIG_FLOAT(rotation_forward_scale_factor, "rrt.rotation_forward_scale_factor");
+
 }  // namespace params
 
 util::Pose PIDController::EscapeCollisionPose(
@@ -207,7 +209,7 @@ util::Twist PIDController::ProposeCommand(const util::Pose& waypoint) const {
   NP_CHECK_VAL(robot_to_waypoint_angle_delta >= -(kPi + kEpsilon) &&
                    robot_to_waypoint_angle_delta <= (kPi + kEpsilon),
                robot_to_waypoint_angle_delta);
-  float x = robot_to_waypoint_delta.norm() * 0.2;  // previous 0    robot_to_waypoint_delta.norm() * 0.5
+  float x = robot_to_waypoint_delta.norm() * params::CONFIG_rotation_forward_scale_factor;  // previous 0    robot_to_waypoint_delta.norm() * 0.5
   bool turning = true;
   if (std::abs(robot_to_waypoint_angle_delta) <
       params::CONFIG_rotation_drive_threshold) {

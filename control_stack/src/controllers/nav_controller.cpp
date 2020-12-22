@@ -174,7 +174,7 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
     const Eigen::Vector2f global_waypoint = GetGlobalPathWaypoint(
         est_pose, global_path, laser_points_wf, total_margin);
     
-    ROS_ERROR("!ENTERING LOCAL PATH FINDER");
+    // ROS_ERROR("!ENTERING LOCAL PATH FINDER");
     const auto local_path = local_path_finder_.FindPath(
         ped_detector_, obstacle_detector_.GetDynamicFeatures(), motion_planner_, est_pose.tra, global_waypoint, est_vel.tra,
         est_pose, current_goal_);
@@ -192,11 +192,11 @@ std::pair<ControllerType, util::Twist> NavController::Execute() {
     cycle_num = 0;
   }
   cycle_num++;
-  ROS_ERROR("\n\n RIGHT BEFORE DRIVE TO POSE");
+  // ROS_ERROR("\n\n RIGHT BEFORE DRIVE TO POSE");
   const util::Twist command = motion_planner_.DriveToPose(
       obstacle_detector_.GetDynamicFeatures(), local_waypoint);
   
-  ROS_ERROR("\n\n\n\n\n actual command: %f, %f, %f, local_waypoint: %f, %f", command.tra.x(), command.tra.y(), command.rot, local_waypoint.tra.x(), local_waypoint.tra.y());
+  // ROS_ERROR("\n\n\n\n\n actual command: %f, %f, %f, local_waypoint: %f, %f", command.tra.x(), command.tra.y(), command.rot, local_waypoint.tra.x(), local_waypoint.tra.y());
 
   return {ControllerType::NAVIGATION, command};
 }

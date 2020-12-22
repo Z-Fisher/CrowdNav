@@ -10,7 +10,7 @@
   <!-- Robot args -->
   <arg name="robot_x_pos" default="5.0"/>
   <arg name="robot_y_pos" default="5.0"/>
-  <arg name="goal_threshold" default="1"/>
+  <arg name="goal_threshold" default="3.0"/>
 
   <!-- Pedestrian args -->
   <arg name="immortal_peds" default="False"/>  <!-- must be capital bool, true is normal, false kills peds over time -->

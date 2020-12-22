@@ -24,7 +24,7 @@ auto stop_time = std::chrono::high_resolution_clock::now();;
 bool stopped_flag = true;
 bool moving = true;
 std::chrono::duration<double> time_spent_stopped;
-float goal_threshold = 2.0;
+float goal_threshold = 5.0;
 
 
 // Calculates distance traveled by robot

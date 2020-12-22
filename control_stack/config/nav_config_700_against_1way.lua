@@ -122,7 +122,7 @@ esc_collision = {
 
 rrt = {
   num_samples = 24;  --VIDEOS: 24, 48 was 48 before
-  cost_bias = 200;  --800 vs 1000 - higher number mean less likely to collide
+  cost_bias = 300;  --800 vs 1000 - higher number mean less likely to collide
   path_length = 3.0;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
