@@ -42,7 +42,7 @@ template <typename Position, typename Cost>
 struct Path {
   std::vector<Position> waypoints;
   Cost cost;
-  double dist_from_goal;
+  float dist_from_goal;
   float collision_prob;
   util::Twist v0;
   int index;

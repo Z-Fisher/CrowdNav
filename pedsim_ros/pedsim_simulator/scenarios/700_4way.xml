@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario>
   <!--Obstacles-->
-  <obstacle x1="15" y1="0" x2="15" y2="15"/>
+  <!-- <obstacle x1="15" y1="0" x2="15" y2="15"/>
   <obstacle x1="15" y1="15" x2="0" y2="15"/>
   <obstacle x1="0" y1="25" x2="15" y2="25"/>
   <obstacle x1="15" y1="25" x2="15" y2="40"/>
   <obstacle x1="25" y1="40" x2="25" y2="25"/>
   <obstacle x1="25" y1="25" x2="40" y2="25"/>
   <obstacle x1="40" y1="15" x2="25" y2="15"/>
-  <obstacle x1="25" y1="15" x2="25" y2="0"/>
+  <obstacle x1="25" y1="15" x2="25" y2="0"/> -->
 
   <waypoint id="mid" x="20" y="20" r="4" b="1"/>
 

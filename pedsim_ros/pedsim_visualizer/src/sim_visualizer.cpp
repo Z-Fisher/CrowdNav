@@ -221,17 +221,24 @@ void SimVisualizer::publishObstacleVisuals() {
 
   visualization_msgs::Marker walls_marker;
   walls_marker.header = current_obstacles->header;
-  walls_marker.id = 10000;
+  walls_marker.header.stamp = ros::Time();
+  walls_marker.id = 10001;
   walls_marker.color.a = 1.0;
   walls_marker.color.r = 0.647059;
-  walls_marker.color.g = 0.164706;
-  walls_marker.color.b = 0.164706;
+  walls_marker.color.g = 1.0;
+  walls_marker.color.b = 1.0;
   walls_marker.scale.x = 1.0;
   walls_marker.scale.y = 1.0;
   walls_marker.scale.z = 2.0;
+  walls_marker.ns = "walls_ns";
+  walls_marker.pose.position.x = 1.0;
+  walls_marker.pose.position.y = 1.0;
   walls_marker.pose.position.z = walls_marker.scale.z / 2.0;
+  walls_marker.lifetime = ros::Duration();
   walls_marker.pose.orientation.w = 1.0;
   walls_marker.type = visualization_msgs::Marker::CUBE_LIST;
+  walls_marker.action = visualization_msgs::Marker::ADD;
+  
 
   for (const auto& line : current_obstacles->obstacles) {
     for (const auto& cell : LineObstacleToCells(line.start.x, line.start.y,
@@ -241,6 +248,7 @@ void SimVisualizer::publishObstacleVisuals() {
       p.y = cell.second;
       p.z = 0.0;
       walls_marker.points.push_back(p);
+      // walls_marker.colors.push_back(walls_marker.color);
     }
   }
 

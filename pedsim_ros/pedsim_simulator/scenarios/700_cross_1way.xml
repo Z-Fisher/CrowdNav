@@ -15,7 +15,8 @@
 
 
   <!-- Kill Zone -->
-  <waypoint id="ped_kill" x="5" y="27" r="2" b="2"/>
+  <waypoint id="ped_end" x="5" y="20" r="2" b="2"/>
+  <waypoint id="ped_start" x="5" y="10" r="2" b="2"/>
 
   <!--AgentClusters-->
   <!-- x,y: spawn position
@@ -23,8 +24,9 @@
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
      
-  <source x="5" y="2" n="1" dx="3" dy="3" type="1">
-    <addwaypoint id="ped_kill"/>
+  <source x="5" y="10" n="1" dx="3" dy="3" type="1">
+    <addwaypoint id="ped_end"/>
+    <addwaypoint id="ped_start"/>
   </source>
 
 

@@ -82,7 +82,11 @@ if __name__ == '__main__':
 
     rospy.init_node("spawn_pedsim_agents")
     immortal_pedestrians = rospy.get_param("/spawn_pedsim_agents/immortal_peds")
+
     actor_limit = rospy.get_param("/spawn_pedsim_agents/actor_limit")
+
+    print('IMMORTAL PEDS: ', immortal_pedestrians)
+    print('ACTOR LIMIT: ', actor_limit)
 
     rospack1 = RosPack()
     pkg_path = rospack1.get_path('pedsim_gazebo_plugin')

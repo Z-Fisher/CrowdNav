@@ -22,3 +22,5 @@ $ roslaunch pedsim_simulator combo.launch
 $ rosrun control_stack nav_node
 
 $ roslaunch obstacle_detector nodes.launch
+
+This repository contains end-to-end functionality to control a turtlebot ROS node and autonomously navigate through complex pedestrian environments simulated in Gazebo. 

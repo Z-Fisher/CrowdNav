@@ -96,7 +96,7 @@ path_finding = {
 };
 
 control = {
-  rotation_drive_threshold = 0.3; -- Radians used to be 0.1.  VIDEOS: -0.32, 0.75
+  rotation_drive_threshold = 0.2; -- Radians used to be 0.1.  VIDEOS: -0.32, 0.75
   rotation_p = 0.1; 
   rotation_i = 0.0;
   translation_p = 0.5;
@@ -135,9 +135,9 @@ esc_collision = {
 -- }
 
 rrt = {
-  num_samples = 24;  --VIDEOS: 24, 48 was 48 before
-  cost_bias = 500;  --800 vs 1000 - higher number mean less likely to collide
-  path_length = 3.0;
+  num_samples = 40;  --VIDEOS: 24, 48 was 48 before
+  cost_bias = 5;  --800 vs 1000 - higher number mean less likely to collide
+  path_length = 3;
   num_paths_visualized = 4;
   ped_var_bias = 0.707;
   ped_var_scale = 0.5;
@@ -145,7 +145,9 @@ rrt = {
   robot_radius = 0.35;
   collision_buffer = 0;
   t_horizon = 5;
-  cycles_until_refresh = 5;
+  cycles_until_refresh = 1;
   switch_discount = 1; -- percentage cost discount on switching
-  y_vel_scale = .25;
+  vel_scale = 1;
+  atan_scale = 1;
+  rotation_forward_scale_factor = 0.25;
 }

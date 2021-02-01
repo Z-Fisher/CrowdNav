@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario>
   <!--Obstacles-->
-  <obstacle x1="-0.5" y1="-0.5" x2="29.5" y2="-0.5"/>
+  <obstacle x1="-0.5" y1="-0.5" x2="32" y2="-0.5"/>
   <obstacle x1="-0.5" y1="-0.5" x2="-0.5" y2="10.5"/>
-  <obstacle x1="-0.5" y1="10.5" x2="29.5" y2="10.5"/>
-  <obstacle x1="29.5" y1="-0.5" x2="29.5" y2="10.5"/>
+  <obstacle x1="-0.5" y1="10.5" x2="32" y2="10.5"/>
+  <obstacle x1="32" y1="-0.5" x2="32" y2="10.5"/>
 
 
 
@@ -13,7 +13,7 @@
   <waypoint id="robot_goal" x="25" y="5" r="1" b="4"/>
 
   <!--Robot-->
-  <agent x="5" y="5" n="1" dx="0" dy="0" type="2">
+  <agent x="5" y="6" n="1" dx="0" dy="0" type="2">
       <addwaypoint id="robot_start"/>
       <addwaypoint id="robot_goal"/>
   </agent>
@@ -21,8 +21,8 @@
 
 
   <!-- Kill Zone -->
-  <waypoint id="ped_kill_A" x="29.5" y="3.5" r="2" b="2"/>
-  <waypoint id="ped_kill_B" x="1.5" y="6.5" r="2" b="2"/>
+  <waypoint id="ped_kill_A" x="29.5" y="6" r="4" b="2"/>
+  <waypoint id="ped_kill_B" x="1.5" y="5" r="4" b="2"/>
   
 
   <!--AgentClusters-->
@@ -30,12 +30,18 @@
          n: number of pedestrians
      dx,dy: 
       type: 0-1 regular people / 2 robot / 3 elderly -->
-
+<!-- 
   <source x="29" y="6.5" n="1" dx="2" dy="2" type="1">
+    <addwaypoint id="ped_kill_B"/>
+  </source> -->
+
+
+  <source x="27" y="5" n="1" dx="2" dy="4" type="1">
     <addwaypoint id="ped_kill_B"/>
   </source>
 
-  <source x="2" y="3.5" n="1" dx="2" dy="2" type="1">
+
+  <source x="1" y="3.5" n="1" dx="2" dy="4" type="1">
     <addwaypoint id="ped_kill_A"/>
   </source>
 
